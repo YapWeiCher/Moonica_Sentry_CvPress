@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{67B66C70-2487-40A3-B1BA-72EF87E01B53}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>5.9.2_msvc2015_64</QtInstall>
+    <QtModules>core;sql;gui;multimedia;widgets;multimediawidgets</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+    <QtPlugin>true</QtPlugin>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>5.9.2_msvc2015_64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <IncludePath>$(COMMON_J_PATH);$(ONNX_INFERENCE_PATH)\include;$(OPENCV_PATH)\include;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtSql;C:\Qt\Qt5.9.2\5.9.2\msvc2015_64\include\QtCharts;C:\Qt\Qt5.9.2\5.9.2\msvc2015_64\include\QtDataVisualization;$(ONNX_RUNTIME_PATH)\include;$(COMMON_PATH);$(MOONICA_PATH)\include;$(COMMON_MOONICA_PATH);$(EM_LIB)\include\;C:\Program Files\HuarayTech\MV Viewer\Development\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ONNX_INFERENCE_PATH)\bin\Release;$(OPENCV_PATH)\x64\vc17\lib;C:\Qt\Qt5.9.2\5.9.2\msvc2015_64\lib;$(ONNX_RUNTIME_PATH)\libraries;$(MOONICA_PATH)\bin\Release;C:\Program Files\HuarayTech\MV Viewer\Development\Lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(QTDIR)\include\QtMultimedia;$(QTDIR)\include\QtMultimediaWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(QTDIR)\include\QtMultimedia;$(QTDIR)\include\QtMultimediaWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Wldap32.Lib;Qt5Charts.lib;Qt5DataVisualization.lib;OnnxInferenceLib.lib;opencv_world4100.lib;onnxruntime.lib;onnxruntime_providers_cuda.lib;onnxruntime_providers_shared.lib;onnxruntime_providers_tensorrt.lib;Moonica.lib;MVSDKmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\CommonJ\Logger.cpp" />
+    <ClCompile Include="..\..\CommonJ\QDragBox.cpp" />
+    <ClCompile Include="..\..\CommonJ\QEllipseItem.cpp" />
+    <ClCompile Include="..\..\CommonJ\QGrabber.cpp" />
+    <ClCompile Include="..\..\CommonJ\QLineItem.cpp" />
+    <ClCompile Include="..\..\CommonJ\QRectItem.cpp" />
+    <ClCompile Include="..\..\Common\QJsonHelper.cpp" />
+    <ClCompile Include="CAMManager.cpp" />
+    <ClCompile Include="CamTest.cpp" />
+    <ClCompile Include="CAM_IRayple.cpp" />
+    <ClCompile Include="DbUserAccount.cpp" />
+    <ClCompile Include="FrameGrabberThread.cpp" />
+    <ClCompile Include="FrameInfo.cpp" />
+    <ClCompile Include="FrameManager.cpp" />
+    <ClCompile Include="PathManager.cpp" />
+    <ClCompile Include="Project.cpp" />
+    <ClCompile Include="QDragPolygon.cpp" />
+    <ClCompile Include="QFrameless.cpp" />
+    <QtMoc Include="TrackingManager.h" />
+    <ClCompile Include="RecorderThread.cpp" />
+    <ClCompile Include="TrackingManger.cpp" />
+    <ClCompile Include="UserAccount.cpp" />
+    <ClCompile Include="utility.cpp" />
+    <ClCompile Include="VideoTest.cpp" />
+    <ClCompile Include="ViewInfo.cpp" />
+    <ClCompile Include="ViewInfo.h" />
+    <QtMoc Include="Moonica_qt.h" />
+    <ClCompile Include="..\..\CommonJ\QMainGraphicsScene.cpp" />
+    <ClCompile Include="..\..\CommonJ\QMainGraphicsView.cpp" />
+    <ClCompile Include="Moonica_qt.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="Moonica_qt.ui" />
+    <QtUic Include="UserAccount.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Moonica_qt.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\CommonJ\QMainGraphicsScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\CommonJ\QMainGraphicsView.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QFrameless.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\CommonJ\QDragBox.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="UserAccount.h" />
+    <QtMoc Include="RecorderThread.h" />
+    <QtMoc Include="VideoTest.h" />
+    <QtMoc Include="FrameGrabberThread.h" />
+    <ClInclude Include="..\..\CommonJ\Logger.h" />
+    <ClInclude Include="..\..\Common\QJsonHelper.h" />
+    <ClInclude Include="CAMManager.h" />
+    <QtMoc Include="CAM_IRayple.h" />
+    <ClInclude Include="CommonStruct.h" />
+    <QtMoc Include="FrameManager.h" />
+    <QtMoc Include="DbUserAccount.h" />
+    <ClInclude Include="FrameInfo.h" />
+    <ClInclude Include="ICamera.h" />
+    <ClInclude Include="IDunification.h" />
+    <ClInclude Include="PathManager.h" />
+    <ClInclude Include="Project.h" />
+    <QtMoc Include="QDragPolygon.h" />
+    <QtMoc Include="..\..\CommonJ\QEllipseItem.h" />
+    <ClInclude Include="..\..\CommonJ\QGrabber.h" />
+    <ClInclude Include="..\..\CommonJ\QLineItem.h" />
+    <ClInclude Include="..\..\CommonJ\QRectItem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\spdlog_native.2021.07.30\build\native\spdlog_native.targets" Condition="Exists('..\packages\spdlog_native.2021.07.30\build\native\spdlog_native.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\spdlog_native.2021.07.30\build\native\spdlog_native.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\spdlog_native.2021.07.30\build\native\spdlog_native.targets'))" />
+  </Target>
+</Project>

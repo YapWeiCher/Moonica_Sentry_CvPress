@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Form Files\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Moonica_qt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QFrameless.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QDragBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QGrabber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QLineItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QRectItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QDragPolygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QEllipseItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Project.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewInfo.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CamTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameGrabberThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackingManger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecorderThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DbUserAccount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserAccount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CAM_IRayple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CAMManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\QJsonHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QMainGraphicsScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonJ\QMainGraphicsView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="Moonica_qt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UserAccount.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Moonica_qt.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Moonica_qt.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\CommonJ\QMainGraphicsScene.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\CommonJ\QMainGraphicsView.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QFrameless.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\CommonJ\QDragBox.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\CommonJ\QEllipseItem.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QDragPolygon.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="VideoTest.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FrameGrabberThread.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FrameManager.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TrackingManager.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="RecorderThread.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="UserAccount.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DbUserAccount.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CAM_IRayple.h">
+      <Filter>Form Files\Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\CommonJ\QGrabber.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonJ\QLineItem.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonJ\QRectItem.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathManager.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Project.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDunification.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonStruct.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAMManager.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICamera.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameInfo.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\QJsonHelper.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonJ\Logger.h">
+      <Filter>Form Files\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

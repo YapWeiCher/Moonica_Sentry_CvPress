@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UserAccount</class>
+ <widget class="QWidget" name="UserAccount">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1159</width>
+    <height>908</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>UserAccount</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ------------------------------------------- */
+/* ---      PROFESSIONAL DARK THEME        --- */
+/* ------------------------------------------- */
+
+/* 1. MAIN WINDOW &amp; GLOBAL DEFAULTS
+   Changed the background-color here to your requested shade.
+---------------------------------------------- */
+QMainWindow, QWidget {
+    background-color: #231f20; /* YOUR NEW, VERY DARK BACKGROUND */
+    color: #E0E0E0;
+    font-family: Segoe UI;
+      border-radius: 12px;
+
+}
+
+/* 2. VIEW PANELS &amp; SEPARATOR LINES
+---------------------------------------------- */
+#img, #img_2, #panaroma {
+    background-color: #353535;   /* This is now the lighter grey for panels */
+    border: 1px solid #1E1E1E;
+    border-top-color: #4A4A4A;
+    border-radius: 2px;
+}
+
+QFrame {
+    background-color: #2D2D2D;
+}
+
+/* 3. INTERACTIVE WIDGETS
+---------------------------------------------- */
+/* Push Buttons */
+#pushButton_capture_button_2, #pushButton_capture_button, #stitch_button, #calibrate_button, #dlt, #dlt2, #load_img, #load_img_2 {
+    background-color: #555555;
+    border: 1px solid #444444;
+    padding: 5px;
+    border-radius: 2px;
+    min-height: 20px;
+}
+/* CORRECTED: The space before the colon was removed for all states */
+#pushButton_capture_button_2:hover, #pushButton_capture_button:hover,  #stitch_button:hover, #calibrate_button:hover, #dlt2:hover, #dlt:hover, #load_img:hover, #load_img_2:hover, #pushButton_save_panorama:hover, #pushButton_delete_panorama:hover{
+    background-color: #666666; /* A standard hover highlight */
+}
+#pushButton_capture_button_2:pressed, #pushButton_capture_button:pressed,  #stitch_button:pressed, #calibrate_button:pressed, #dlt2:pressed, #dlt:pressed, #load_img:pressed, #load_img_2:pressed, #pushButton_save_panorama:pressed, #pushButton_delete_panorama:pressed {
+    background-color: #4A4A4A;
+}
+#calibrate:disabled, #delete_2:disabled, #delete_3:disabled, #load_img:disabled, #load_img2:disabled {
+    background-color: #404040;
+    color: #6A6A6A;
+    border-color: #505050;
+}
+
+/* Text Inputs */
+QLineEdit, QPlainTextEdit, QTextEdit {
+    background-color: #2D2D2D;
+    border: 1px solid #555555;
+    padding: 4px;
+    border-radius: 2px;
+}
+
+/* 4. TEXT &amp; LABELS
+---------------------------------------------- */
+QLabel {
+    background-color: transparent;
+    color: #F0F0F0;
+    padding-left: 5px;
+}
+QLabel#titleLabel {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* 5. DATA &amp; DISPLAY WIDGETS
+---------------------------------------------- */
+/* Table Widgets */
+QTableWidget {
+    background-color: #2D2D2D;
+    gridline-color: #454545;
+}
+QHeaderView::section {
+    background-color: #454545;
+    padding: 4px;
+    border: 1px solid #555555;
+}
+
+/* Progress Bar */
+#progressbar {
+    border: 1px solid #555555;
+    border-radius: 2px;
+    text-align: center;
+    background-color: #2D2D2D;
+    color: #FFFFFF;
+}
+#progressbar::chunk {
+    background-color: #0078d7;
+    width: 20px;
+}
+
+/* 6. SCROLLBARS (VERTICAL &amp; HORIZONTAL)
+---------------------------------------------- */
+QScrollBar:vertical {
+    border: none;
+    background: #1B1B1E; /* Match new background */
+    width: 12px;
+    margin: 15px 0 15px 0;
+}
+QScrollBar:handle:vertical {
+    background: #5A5A5A;
+    min-height: 30px;
+    border-radius: 6px;
+}
+QScrollBar:handle:vertical:hover {
+    background: #6A6A6A;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none;
+    background: #454545;
+    height: 14px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background: #1B1B1E; /* Match new background */
+    height: 12px;
+    margin: 0px 15px 0px 15px;
+}
+QScrollBar::handle:horizontal {
+    background: #5A5A5A;
+    min-width: 30px;
+    border-radius: 6px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: #6A6A6A;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    border: none;
+    background: #454545;
+    width: 14px;
+    subcontrol-origin: margin;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,7">
+   <item>
+    <widget class="QFrame" name="frame_2">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QFrame" name="frame">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QToolButton" name="toolButton_movieCctv">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>:/ResultViewer/Icon/Ai_Mascot.png</normaloff>:/ResultViewer/Icon/Ai_Mascot.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_3">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(39, 44, 54);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QStackedWidget" name="stackedWidget_userPage">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="0,2,8">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>18</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(204, 204, 255);</string>
+            </property>
+            <property name="text">
+             <string>Moonica - Sentry</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #B6B6B4;</string>
+            </property>
+            <property name="text">
+             <string>Login</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Password:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Access Level:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QTableWidget" name="tableWidget_loginAccount">
+              <property name="font">
+               <font>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineEdit_loginPassword">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0" colspan="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="pushButton_createUser">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Create New User</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/ResultViewer/Icon/16x16/cil-user-follow.png</normaloff>:/ResultViewer/Icon/16x16/cil-user-follow.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_logIn">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Log In</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/ResultViewer/Icon/16x16/cil-lock-unlocked.png</normaloff>:/ResultViewer/Icon/16x16/cil-lock-unlocked.png</iconset>
+                </property>
+                <property name="shortcut">
+                 <string>Return</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="comboBox_logInAccessLevel">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>14</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>UserName:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEdit_loginUserName">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,8">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>Create Account</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_4" rowstretch="1,1,1,0" rowminimumheight="0,0,0,0">
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="lineEdit_createAccUserName">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>User Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="lineEdit_createAccPassword">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Password:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QComboBox" name="comboBox_createAccAccessLevel">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Access Level:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="pushButton_cancelCreateAccount">
+              <property name="text">
+               <string>Cancel</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>:/ResultViewer/Icon/16x16/cil-ban.png</normaloff>:/ResultViewer/Icon/16x16/cil-ban.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="pushButton_createAccount">
+              <property name="text">
+               <string>Create Account</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>:/ResultViewer/Icon/16x16/cil-user-follow.png</normaloff>:/ResultViewer/Icon/16x16/cil-user-follow.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="ResultViewer.qrc"/>
+ </resources>
+ <connections/>
+</ui>
