@@ -161,9 +161,8 @@ void FrameGrabberThread::stopFrameGrabbing()
 
 void FrameGrabberThread::iCam_iniIndustrialCamera()
 {
-    qDebug() << "Ini Camera";
-    QString path = "C:/Moonica/camera.json";
-
+    QString path = "C:/Moonica/"+ _camId+".json";
+    qDebug() << "Ini Camera: "<< path;
     QJsonObject obj;
 
     if (!jsonHelper::loadJson(path, obj)) {
@@ -308,6 +307,8 @@ bool FrameGrabberThread::iCam_disconnect()
 bool FrameGrabberThread::iCam_startGrab()
 {
     if (!iCam_valid()) return false;
+
+    qDebug() << "Serial Number: " << _iCam->getSerialNumber();
     auto ret = _iCam->startGrab();
     if (!ret) ct::logger::error("Failed to start grabbing: %s", _camId.toStdString().c_str());
     return ret;
