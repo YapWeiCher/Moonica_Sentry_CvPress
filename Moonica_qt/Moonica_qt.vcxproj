@@ -118,7 +118,6 @@
     <ClCompile Include="..\..\CommonJ\QLineItem.cpp" />
     <ClCompile Include="..\..\CommonJ\QRectItem.cpp" />
     <ClCompile Include="..\..\Common\QJsonHelper.cpp" />
-    <ClCompile Include="CAMManager.cpp" />
     <ClCompile Include="CamTest.cpp" />
     <ClCompile Include="CAM_IRayple.cpp" />
     <ClCompile Include="DbUserAccount.cpp" />
@@ -169,13 +168,11 @@
     <QtMoc Include="FrameGrabberThread.h" />
     <ClInclude Include="..\..\CommonJ\Logger.h" />
     <ClInclude Include="..\..\Common\QJsonHelper.h" />
-    <ClInclude Include="CAMManager.h" />
     <QtMoc Include="CAM_IRayple.h" />
     <ClInclude Include="CommonStruct.h" />
     <QtMoc Include="FrameManager.h" />
     <QtMoc Include="DbUserAccount.h" />
     <ClInclude Include="FrameInfo.h" />
-    <ClInclude Include="ICamera.h" />
     <ClInclude Include="IDunification.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Project.h" />

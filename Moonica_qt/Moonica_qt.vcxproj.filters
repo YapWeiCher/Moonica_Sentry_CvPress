@@ -89,9 +89,6 @@
     <ClCompile Include="CAM_IRayple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CAMManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FrameInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -193,12 +190,6 @@
       <Filter>Form Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommonStruct.h">
-      <Filter>Form Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CAMManager.h">
-      <Filter>Form Files\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICamera.h">
       <Filter>Form Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FrameInfo.h">

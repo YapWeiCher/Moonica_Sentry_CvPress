@@ -65,7 +65,7 @@ Moonica_qt::Moonica_qt(QWidget* parent)
 
 	loadAppSetting(PathManager::_appSettingPath);
 
-	//iniCamera();
+	
 
 	if (_curProject._projectName.isEmpty()) showProjectsPage();
 }
@@ -80,14 +80,6 @@ Moonica_qt::~Moonica_qt()
 	saveAppSetting(PathManager::_appSettingPath);
 }
 
-
-void Moonica_qt::iniCamera()
-{
-	qDebug() << "Ini Camera";
-	CAMManager::instance().loadConfig(QStringLiteral("C:/Moonica/camera.json"));
-
-	
-}
 
 void Moonica_qt::switchPageWithAnimation(WorkingPage index)
 {

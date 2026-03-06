@@ -63,32 +63,6 @@ void FrameGrabberThread::run()
 
 }
 
-void FrameGrabberThread::startFrameGrabbing_industrialCam()
-{
-  
-    while (_is_running_frame)
-    {
-      
-        CAMManager::instance().softTrigger("cam1");
-		//CAMManager::instance().waitAcquisition("cam1", 500);
-        QThread::msleep(50);
-        auto f = CAMManager::instance().frame("cam1");
-     
-
-      /*  CAMManager::instance().setReady("cam1", false);
-        QThread::msleep(50);
-        auto f = CAMManager::instance().frame("cam1");*/
-         cv::Mat safe = f.frame.clone();     // deep copy NOW (important!)
-         emit frameReady(safe, _camId, _currentSecond);
-        
-       
-
-       
-        //CAMManager::instance().setReady("cam1", true);
-        //QThread::msleep(50);
-    }
-   
-}
 
 void FrameGrabberThread::startFrameGrabbing()
 {

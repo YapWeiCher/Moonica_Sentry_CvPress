@@ -57,9 +57,6 @@
 #include "TrackingStruct.h"
 #include "UserAccount.h"
 
-
-#include "CAMManager.h"
-
 class VideoCapture;
 class QVideoWidget;
 class QMediaPlayer;
@@ -203,8 +200,6 @@ private:
     void clearAllView();
     void clearScene(QMainGraphicsScene* scene, QGraphicsPixmapItem*& item);
     void connectSignalAndSlot();
-
-    void iniCamera();
 
     void showWorkPage();
     void showCamTestPage();

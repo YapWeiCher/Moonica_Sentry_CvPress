@@ -1,5 +1,4 @@
 #pragma once
-#include "ICamera.h"
 #include "IMV/IMVApi.h"
 #include "FrameInfo.h"
 #include "MessageQue.h"

@@ -11,7 +11,6 @@
 #include "PathManager.h"
 
 #include "Project.h"
-#include "CAMManager.h"
 #include "MessageQue.h"
 #include "QJsonHelper.h"
 #include "CAM_IRayple.h"
@@ -40,7 +39,7 @@ public:
 	void run();
 	void setSetting(QString url);
 
-	void startFrameGrabbing_industrialCam();
+
 	void startFrameGrabbing();
 	void stopFrameGrabbing();
 
