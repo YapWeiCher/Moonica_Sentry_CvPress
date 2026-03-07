@@ -370,8 +370,8 @@ public slots:
 
     void updateGlobalCoordinate(const QVector<ParentObject>& trackingObjects, int numberOfPeople);
     void forceSetNumberFloorObject();
-    void updateSingleViewResult(const QHash<QString, SingleViewParentObject>& singleViewParent,
-        const QHash<QString, std::vector<OnnxResult>>& _localOdResult);
+    void updateSingleViewResult(QString towerLightColor, 
+        const CleaningResult& cleaningResult);
 
     void clearOverlayItems(CameraDisplay& cd);
     QRectF toRectF(const OnnxResult& r);

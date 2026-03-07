@@ -39,7 +39,7 @@ bool RecorderThread::openNewSegment(const QString& camId, bool force)
         st.currentPath.toStdString(),
         cv::VideoWriter::fourcc('m', 'p', '4', 'v'),
         7,                          // fps
-        cv::Size(1280, 720),        // size
+        cv::Size(1440, 1080),        // size
         true
     );
 

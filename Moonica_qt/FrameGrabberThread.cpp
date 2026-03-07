@@ -49,16 +49,16 @@ void FrameGrabberThread::run()
 {
     _is_running_frame = true;
 
-    if (_camType == CAMERA_TYPE::INDUSTRIAL_CAM)
-    {
-        //startFrameGrabbing_industrialCam();
-        iCam_startGrab();
-       
-    }
-    else
+    if (_isVideoMode)
     {
         startFrameGrabbing();
     }
+    else if (_camType == CAMERA_TYPE::INDUSTRIAL_CAM)
+    {
+        //startFrameGrabbing_industrialCam();
+        iCam_startGrab();      
+    }
+  
    
 
 }

@@ -1,132 +1,5 @@
 #include "TrackingManager.h"
 
-float TrackingManager::computeAngle(const cv::Point2f& a, const cv::Point2f& b, const cv::Point2f& c) {
-	// angle at point b formed by (a-b-c)
-	cv::Point2f ab = a - b;
-	cv::Point2f cb = c - b;
-	float dot = ab.x * cb.x + ab.y * cb.y;
-	float norm_ab = std::sqrt(ab.x * ab.x + ab.y * ab.y);
-	float norm_cb = std::sqrt(cb.x * cb.x + cb.y * cb.y);
-	float cos_angle = dot / (norm_ab * norm_cb + 1e-6);
-	return std::acos(std::clamp(cos_angle, -1.0f, 1.0f)) * 180.0 / CV_PI;
-}
-cv::Point2f TrackingManager::CorrectWristPoint(const OnnxResult& localBox, bool left) {
-	int shoulder = left ? Keypoint::LEFT_SHOULDER : Keypoint::RIGHT_SHOULDER;
-	int elbow = left ? Keypoint::LEFT_ELBOW : Keypoint::RIGHT_ELBOW;
-	int wrist = left ? Keypoint::LEFT_WRIST : Keypoint::RIGHT_WRIST;
-
-	auto pts = localBox.keypoints;
-
-	// Step 1: upper arm length (shoulder–elbow)
-	float upperArmLen = cv::norm(pts[shoulder] - pts[elbow]);
-
-	// Step 2: expected forearm length (elbow–wrist)
-	float expectedForearm = 0.9f * upperArmLen;  // tweak factor (0.9–1.1)
-
-	// Step 3: actual forearm length
-	float elbowToWrist = cv::norm(pts[elbow] - pts[wrist]);
-
-	cv::Point2f correctedWrist = pts[wrist];
-
-	// Step 4: if forearm too short, extend wrist away from elbow
-	if (elbowToWrist < 0.9f * expectedForearm) {
-
-	}
-	cv::Point2f dir = pts[wrist] - pts[elbow]; // elbow -> wrist
-	float scale = expectedForearm / (cv::norm(dir) + 1e-6f);
-	correctedWrist = pts[elbow] + dir * scale;
-
-	return correctedWrist;
-}
-
-
-
-void TrackingManager::transformSittingToStanding(OnnxResult& localBox) {
-
-	auto& pts = localBox.keypoints;
-
-	// Shoulders & hips
-	cv::Point2f leftShould = pts[LEFT_SHOULDER];
-	cv::Point2f rightShould = pts[RIGHT_SHOULDER];
-	cv::Point2f leftHip = pts[LEFT_HIP];
-	cv::Point2f rightHip = pts[RIGHT_HIP];
-
-	// Knees & ankles
-	cv::Point2f leftKnee = pts[LEFT_KNEE];
-	cv::Point2f rightKnee = pts[RIGHT_KNEE];
-	cv::Point2f leftAnkle = pts[LEFT_ANKLE];
-	cv::Point2f rightAnkle = pts[RIGHT_ANKLE];
-
-	// --- Torso direction (shoulder ? hip) ---
-	cv::Point2f shoulderMid = 0.5f * (leftShould + rightShould);
-	cv::Point2f hipMid = 0.5f * (leftHip + rightHip);
-
-	cv::Point2f torsoDir = hipMid - shoulderMid;
-	float len = cv::norm(torsoDir);
-	if (len > 1e-5) {
-		torsoDir *= (1.0f / len); // normalize
-	}
-	else {
-		torsoDir = cv::Point2f(0, 1); // fallback: vertical
-	}
-
-	// --- Left side ---
-	float leftLegLen = cv::norm(leftHip - leftKnee);
-	float leftShinLen = cv::norm(leftKnee - leftAnkle);
-
-	// knee = hip + torsoDir * legLength
-	pts[LEFT_KNEE] = leftHip + torsoDir * leftLegLen;
-	// ankle = knee + torsoDir * shinLength
-	pts[LEFT_ANKLE] = pts[LEFT_KNEE] + torsoDir * leftShinLen;
-
-	// --- Right side ---
-	float rightLegLen = cv::norm(rightHip - rightKnee);
-	float rightShinLen = cv::norm(rightKnee - rightAnkle);
-
-	pts[RIGHT_KNEE] = rightHip + torsoDir * rightLegLen;
-	pts[RIGHT_ANKLE] = pts[RIGHT_KNEE] + torsoDir * rightShinLen;
-}
-
-
-cv::Point2f TrackingManager::CorrectAnklePoint(const OnnxResult& localBox,
-
-	bool left)
-{
-
-	int shoulder = left ? Keypoint::LEFT_SHOULDER : Keypoint::RIGHT_SHOULDER;
-	int hip = left ? Keypoint::LEFT_HIP : Keypoint::RIGHT_HIP;
-	int knee = left ? Keypoint::LEFT_KNEE : Keypoint::RIGHT_KNEE;
-	int ankle = left ? Keypoint::LEFT_ANKLE : Keypoint::RIGHT_ANKLE;
-
-	auto pts = localBox.keypoints;
-
-
-	// Step 1: torso length (shoulder–hip)
-	float torsoLen = cv::norm(pts[shoulder] - pts[hip]);
-
-	// Step 2: expected shin length (knee–ankle)
-	float expectedShin = 0.9f * torsoLen;
-
-	// Step 3: actual shin length
-	float kneeToAnkle = cv::norm(pts[knee] - pts[ankle]);
-
-	cv::Point2f correctedAnkle = pts[ankle];
-
-	// Step 4: correction logic
-	if (kneeToAnkle < 0.5f * expectedShin) {
-		correctedAnkle.x = pts[knee].x;
-		correctedAnkle.y = pts[knee].y + expectedShin;
-	}
-	else {
-		correctedAnkle.x = pts[knee].x;
-		correctedAnkle.y = pts[knee].y + kneeToAnkle;
-	}
-
-
-
-	return correctedAnkle;
-}
-
 TrackingManager::TrackingManager()
 {
 
@@ -183,17 +56,19 @@ void TrackingManager::removeActiveCamera(QString camId)
 }
 
 
-void TrackingManager::onResultReady(QString camId, const std::vector<OnnxResult>& peResult, const std::vector<OnnxResult>& odResult)
+void TrackingManager::onResultReady(
+	QString camId, 
+	const cv::Mat& frame, 
+	const std::vector<OnnxResult>& peResult, const std::vector<OnnxResult>& odResult)
 {
 
 	_localTrackingResult[camId] = peResult;  // overwrite old frame
 	_localOdResult[camId] = odResult;
-
+    _camFrame[camId] = frame;
 	
 	if (_localTrackingResult.size() == _activeCameraList.size() && !_isProceesingGlobalId)
 	{
-		runSingleViewChecking();
-		runMoonicaApi();
+        runCvPressCleaningCheck();
 		
 	}
 
@@ -214,221 +89,143 @@ void TrackingManager::runMoonicaApi()
 }
 
 
-void TrackingManager::runSingleViewChecking()
+
+
+void TrackingManager::runCvPressCleaningCheck()
 {
 	_isProceesingGlobalId = true;
 
-	for (auto it = _sViewParentObjHash.begin(); it != _sViewParentObjHash.end(); )
-	{
-		auto& sParent = it.value();
+	// work do here
 
-		sParent.isTracking = false;
-		sParent.inCheckingArea = false;
-		sParent.lostTrackFrame++;
+    QString towerLightColor = "off";
+	// 1. Detect Yellow light for 50 frames lets say
+    if (_doorPointHash.contains(_towerLightCam) && _camFrame.contains(_towerLightCam))
+    {
+     
+        QPolygonF lightRoi;
+        for (auto d : _doorPointHash[_towerLightCam])
+        {
+            lightRoi << d;
+        }
+      
 
-		if (sParent.lostTrackFrame > 200)
-		{
-			it = _sViewParentObjHash.erase(it);  // erase returns next iterator
-		}
-		else
-		{
-			++it;
-		}
-	}
+        towerLightColor = indentifyTowerLightColor(_camFrame[_towerLightCam], lightRoi);
 
-	for (auto& camId : _activeCameraList)
-	{
-		if (_localTrackingResult.contains(camId))
-		{
-			for (auto& tResult : _localTrackingResult[camId])
-			{
-				QString parentId = camId + "[@]" + QString::number(tResult.tracking_id);
+     
+    }
+ 
 
+	// 2. check trigger to operator start cleaning time
 
-				SingleViewParentObject& pObj = _sViewParentObjHash[parentId];
-				pObj.camId = camId;
-				pObj.globalId = parentId;
-				pObj.isTracking = true;
-				pObj.lostTrackFrame = 0;
-				pObj.trackingResult = tResult;
+	// 3. once detect hand, trigger cleaning start time
 
-				if (_localOdResult.contains(camId))
-				{
-					if (!pObj.hasFacemask)
-					{
-						if (checkHasMask(tResult, _localOdResult[camId], { 6 }))
-						{
-							pObj.hasFaceMaskFrame++;
-						}
-						if (pObj.hasFaceMaskFrame > _checkingCriteria.detectionFrameBuffer)
-							pObj.hasFacemask = true;
-					}
-						
-					if (!pObj.hasGlove)
-					{
-						if (checkHasGlove(tResult, _localOdResult[camId], { 5 }))
-						{
-							pObj.hasGloveFrame++;
-						}
-						if (pObj.hasGloveFrame > _checkingCriteria.detectionFrameBuffer)
-							pObj.hasGlove = true;
-					}
-					
-					if (!pObj.hasEsdShoe)
-					{
-						if (checkHasShoe(tResult, _localOdResult[camId], { 8, 10, 11 }))
-						{
-							pObj.hasEsdShoeFrame++;
-						}
-						if (pObj.hasEsdShoeFrame > _checkingCriteria.detectionFrameBuffer)
-							pObj.hasEsdShoe = true;
-					}
-					if (!pObj.hasSmock)
-					{
-						if (checkHasSmock(tResult, _localOdResult[camId], { 0,1,2,3,4,9 }))
-						{
-							pObj.hasSmockFrame++;
-						}
-						if (pObj.hasSmockFrame > _checkingCriteria.detectionFrameBuffer)
-							pObj.hasSmock = true;
-					}
-					
-				
-				}
+	// 4. check if hand is inside cleaning area
 
-				if (_doorPointHash.contains(camId))
-				{
-					QVector<QPointF>& area = _doorPointHash[camId];
-					QPolygonF polyArea;
-					for (auto& p : area)
-					{
-						polyArea << p;
-					}
+	// 5. End Cleaning triggering
 
-					const qreal cx = (pObj.trackingResult.x1 + pObj.trackingResult.x2) * 0.5;
-					const qreal cy = std::max(pObj.trackingResult.y1, pObj.trackingResult.y2);   // bottom
-					QPointF bottomCenter(cx, cy);
-					
-					bool inside = polyArea.containsPoint(
-						bottomCenter,
-						Qt::OddEvenFill  
-					);
-
-					if (inside)
-					{
-						pObj.inCheckingArea = true;
-
-						bool pass = true;
-						if (_checkingCriteria.checkMask)
-						{
-							if (!pObj.hasFacemask)
-								pass = false;
-						}
-						if (_checkingCriteria.checkGlove)
-						{
-							if (!pObj.hasGlove)
-								pass = false;
-						}
-						if (_checkingCriteria.checkShoe)
-						{
-							if (!pObj.hasEsdShoe)
-								pass = false;
-						}
-						if (_checkingCriteria.checkSmock)
-						{
-							if (!pObj.hasSmock)
-								pass = false;
-						}
-						pObj.isPass = pass;
-					}
-				}
-
-				_sViewParentObjHash.insert(parentId, pObj);
-			}
-		}
-	}
-
-	emit updateSingleViewResult(_sViewParentObjHash, _localOdResult);
-
-
+	emit updateSingleViewResult(towerLightColor, _cleaningResult);
 	_isProceesingGlobalId = false;
 }
 
-bool TrackingManager::checkHasMask(const OnnxResult& person,
-	const std::vector<OnnxResult>& objDetections,
-	QList<int> maskClassIds,
-	float minObjConf,
-	float minKptConf) const
+QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QPolygonF& lightRoi)
 {
-	cv::Rect2f face = faceRoi(person, minKptConf);
+	// tower light position is within the light ROi
+	// this function indentify whether the color is 
+	// 1. Red
+	// 2. Orange/Yellow
+	// 3. Green
 
-	// Mask boxes are usually small; center-inside is very reliable.
-	// IoU threshold low on purpose.
-	return anyObjMatchesRoi(objDetections, maskClassIds, face,
-		minObjConf,
-		/*minIou=*/0.03f,
-		/*useCenterInside=*/true);
+    if (frame.empty() || lightRoi.size() < 3)
+        return "Unknown";
+
+    // Support both BGR and grayscale safety
+    cv::Mat bgrFrame;
+    if (frame.channels() == 3)
+    {
+        bgrFrame = frame;
+    }
+    else if (frame.channels() == 4)
+    {
+        cv::cvtColor(frame, bgrFrame, cv::COLOR_BGRA2BGR);
+    }
+    else if (frame.channels() == 1)
+    {
+        cv::cvtColor(frame, bgrFrame, cv::COLOR_GRAY2BGR);
+    }
+    else
+    {
+        return "Unknown";
+    }
+
+    // Create ROI mask from polygon
+    cv::Mat mask = cv::Mat::zeros(bgrFrame.size(), CV_8UC1);
+
+    std::vector<cv::Point> pts;
+    pts.reserve(lightRoi.size());
+    for (int i = 0; i < lightRoi.size(); ++i)
+    {
+        QPointF p = lightRoi[i];
+        pts.emplace_back(static_cast<int>(std::round(p.x())),
+            static_cast<int>(std::round(p.y())));
+    }
+
+    std::vector<std::vector<cv::Point>> contours = { pts };
+    cv::fillPoly(mask, contours, cv::Scalar(255));
+
+    // Optional: reduce noise near polygon border
+    cv::erode(mask, mask, cv::Mat(), cv::Point(-1, -1), 1);
+
+    // Convert to HSV
+    cv::Mat hsv;
+    cv::cvtColor(bgrFrame, hsv, cv::COLOR_BGR2HSV);
+
+    // HSV thresholds
+    // Note:
+    // Red wraps around hue, so use 2 ranges.
+    cv::Mat redMask1, redMask2, redMask;
+    cv::Mat yellowMask, greenMask;
+
+    cv::inRange(hsv, cv::Scalar(0, 80, 80), cv::Scalar(10, 255, 255), redMask1);
+    cv::inRange(hsv, cv::Scalar(170, 80, 80), cv::Scalar(180, 255, 255), redMask2);
+    cv::bitwise_or(redMask1, redMask2, redMask);
+
+    cv::inRange(hsv, cv::Scalar(15, 80, 80), cv::Scalar(40, 255, 255), yellowMask);
+    cv::inRange(hsv, cv::Scalar(40, 80, 80), cv::Scalar(90, 255, 255), greenMask);
+
+    // Keep only pixels inside polygon ROI
+    cv::bitwise_and(redMask, mask, redMask);
+    cv::bitwise_and(yellowMask, mask, yellowMask);
+    cv::bitwise_and(greenMask, mask, greenMask);
+
+    int redCount = cv::countNonZero(redMask);
+    int yellowCount = cv::countNonZero(yellowMask);
+    int greenCount = cv::countNonZero(greenMask);
+    int totalCount = cv::countNonZero(mask);
+
+    if (totalCount <= 0)
+        return "Unknown";
+
+    // Ratio against ROI area
+    double redRatio = static_cast<double>(redCount) / totalCount;
+    double yellowRatio = static_cast<double>(yellowCount) / totalCount;
+    double greenRatio = static_cast<double>(greenCount) / totalCount;
+
+    // Choose dominant color only if enough pixels are present
+    const double minRatio = 0.08; // tune this
+
+    double maxRatio = std::max({ redRatio, yellowRatio, greenRatio });
+
+    if (maxRatio < minRatio)
+        return "Off";
+
+    if (redRatio >= yellowRatio && redRatio >= greenRatio)
+        return "Red";
+
+    if (yellowRatio >= redRatio && yellowRatio >= greenRatio)
+        return "Yellow";
+
+    return "Green";
 }
 
-bool TrackingManager::checkHasGlove(const OnnxResult& person,
-	const std::vector<OnnxResult>& objDetections,
-	QList<int> gloveClassIds,
-	float minObjConf,
-	float minKptConf) const
-{
-	cv::Rect2f leftHand = handRoi(person, Keypoint::LEFT_WRIST, Keypoint::LEFT_ELBOW, minKptConf);
-	cv::Rect2f rightHand = handRoi(person, Keypoint::RIGHT_WRIST, Keypoint::RIGHT_ELBOW, minKptConf);
-
-	std::vector<cv::Rect2f> rois;
-	if (rectValid(leftHand))  rois.push_back(leftHand);
-	if (rectValid(rightHand)) rois.push_back(rightHand);
-
-	if (rois.empty()) return false;
-
-	// If both hands visible, require both gloves. If only one visible, require one.
-	const int need = (rois.size() >= 2) ? 2 : 1;
-	const int got = countMatchesInRois(objDetections, gloveClassIds, rois,
-		minObjConf,
-		/*minIou=*/0.02f);
-	return got >= need;
-}
-
-bool TrackingManager::checkHasShoe(const OnnxResult& person,
-	const std::vector<OnnxResult>& objDetections,
-	QList<int> shoeClassIds,
-	float minObjConf,
-	float minKptConf) const
-{
-	cv::Rect2f leftFoot = footRoi(person, Keypoint::LEFT_ANKLE, Keypoint::LEFT_KNEE, minKptConf);
-	cv::Rect2f rightFoot = footRoi(person, Keypoint::RIGHT_ANKLE, Keypoint::RIGHT_KNEE, minKptConf);
-
-	std::vector<cv::Rect2f> rois;
-	if (rectValid(leftFoot))  rois.push_back(leftFoot);
-	if (rectValid(rightFoot)) rois.push_back(rightFoot);
-
-	if (rois.empty()) return false;
-
-	// If both feet visible, require both shoes. If only one visible, require one.
-	const int need = (rois.size() >= 2) ? 2 : 1;
-	const int got = countMatchesInRois(objDetections, shoeClassIds, rois,
-		minObjConf,
-		/*minIou=*/0.02f);
-	return got >= need;
-}
-
-bool TrackingManager::checkHasSmock(const OnnxResult& person,
-	const std::vector<OnnxResult>& objDetections,
-	QList<int> smockClassIds,
-	float minObjConf,
-	float minKptConf) const
-{
-	cv::Rect2f torso = torsoRoi(person, minKptConf);
-
-	// Smock/shirt box usually overlaps torso a lot.
-	return anyObjMatchesRoi(objDetections, smockClassIds, torso,
-		minObjConf,
-		/*minIou=*/0.08f,
-		/*useCenterInside=*/true);
-}
 
 

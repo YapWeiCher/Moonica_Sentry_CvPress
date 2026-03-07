@@ -124,6 +124,7 @@
     <ClCompile Include="FrameGrabberThread.cpp" />
     <ClCompile Include="FrameInfo.cpp" />
     <ClCompile Include="FrameManager.cpp" />
+    <ClCompile Include="LightState.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="QDragPolygon.cpp" />

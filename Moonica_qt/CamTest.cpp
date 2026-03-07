@@ -429,145 +429,6 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 		return;
 	}
 	
-
-
-	if (false) // render object image
-	{
-
-		for (auto it = _objectCamTrackingId.begin(); it != _objectCamTrackingId.end(); ++it)
-		{
-
-			const QString& globalId = it.key();
-			const QStringList& trackingIds = it.value();
-
-			QImage img = _objectImage[globalId];
-
-			if (img.isNull()) {
-
-				for (auto tId : trackingIds)
-				{
-					if (tId.split("[@]").size() != 2) continue;
-					QString camId = tId.split("[@]")[0];
-					QString trackingId = tId.split("[@]")[1];
-
-					if (camId == cameraId)
-					{
-
-						for (auto& oR : oResult)
-						{
-
-							if (QString::number(oR.tracking_id) == trackingId)
-							{
-
-								QRectF objectRect(oR.x1, oR.y1, oR.x2 - oR.x1, oR.y2 - oR.y1);
-								// Convert to QRect with integer coordinates
-								QRect cropRect = objectRect.toRect();
-								// Make sure the crop rectangle is within the frame bounds
-								cropRect = cropRect.intersected(frame.rect());
-								QImage cropped = frame.copy(cropRect);
-								_objectImage[globalId] = cropped;
-							}
-						}
-					}
-				}
-			}
-			else {
-				_globalIDImageProcessed.append(globalId);
-				if (_globalIDImageProcessed.size() > 300) {
-					_globalIDImageProcessed.removeFirst();
-				}
-				//qDebug() << "Image for globalId" << globalId << "is OK, size:" << img.size();
-			}
-		}
-
-		int row = 0;
-		for (auto it = _objectImage.begin(); it != _objectImage.end(); ++it)
-		{
-
-			const QString& globalId = it.key();
-			const QImage& img = it.value();
-			if (_globalIDImageProcessed.contains(globalId)) continue;
-
-
-			if (!img.isNull()) {
-
-				QColor borderColor = QColor(_globalIdColor[globalId]);
-
-
-				QImage resized = img.scaled(100, 100, Qt::IgnoreAspectRatio);
-				// Title label
-				QLabel* title = new QLabel(globalId, ui.widget_ObjectImage);
-				title->setAlignment(Qt::AlignCenter);
-				QFont font = title->font();
-				font.setPointSize(16);        // increase font size (default ~9–10)
-				font.setBold(true);           // optional: make bold
-				title->setFont(font);
-
-
-				// has GLove label
-				QLabel* gloveLabel_left = new QLabel("Left Glove Pass:", ui.widget_ObjectImage);
-				gloveLabel_left->setAlignment(Qt::AlignLeft);
-
-				// has GLove label
-				QLabel* gloveLabel_right = new QLabel("Right Glove Pass:", ui.widget_ObjectImage);
-				gloveLabel_right->setAlignment(Qt::AlignLeft);
-
-				// has jumpsui label
-				QLabel* jumpSuitLabel = new QLabel("JumpSuit Pass:", ui.widget_ObjectImage);
-				jumpSuitLabel->setAlignment(Qt::AlignLeft);
-
-				// store for later access
-				_gloveLabels_left.insert(globalId, gloveLabel_left);
-				_gloveLabels_right.insert(globalId, gloveLabel_right);
-				_jumpsuitLabels.insert(globalId, jumpSuitLabel);
-
-				// Image label
-				QLabel* imgLabel = new QLabel(ui.widget_ObjectImage);
-				imgLabel->setPixmap(QPixmap::fromImage(resized));
-				imgLabel->setScaledContents(true);
-
-				// Stack title + image vertically
-				QVBoxLayout* vbox = new QVBoxLayout;
-				vbox->addWidget(title);
-				vbox->addWidget(imgLabel);
-				vbox->addWidget(gloveLabel_left);
-				vbox->addWidget(gloveLabel_right);
-				vbox->addWidget(jumpSuitLabel);
-				vbox->setStretch(1, 1);
-
-				// Wrap into a container widget
-				QWidget* container = new QWidget(ui.widget_ObjectImage);
-				container->setLayout(vbox);
-
-
-
-				QString style = QString(
-					"QWidget#container_%1 { "
-					"  border: 2px solid rgb(%2,%3,%4); "
-					"  border-radius: 5px; "
-					"}"
-				).arg(globalId)
-					.arg(borderColor.red())
-					.arg(borderColor.green())
-					.arg(borderColor.blue());
-
-				container->setObjectName("container_" + globalId); // unique name
-				container->setStyleSheet(style);
-
-
-
-				// Place into grid
-				ui.verticalLayout_objectImage->addWidget(container, row);
-				_objectContainers.insert(globalId, container);
-
-				row++;
-
-			}
-		}
-
-
-	}
-
 	if (true) // ui display
 	{
 		double fullVideoLength = _fullVideoStreamSecond;
@@ -662,8 +523,66 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QGraphicsPolygonItem* polyItem = camScene->addPolygon(poly, pen, brush);
 
+				QString towerLightColor = _cameraDisplayHash[cameraId].towerLightColor;
 
 				polygonsItems.append(polyItem);
+
+				// tower light color
+
+				if (cameraId == "towerLightCam")
+				{
+					// Styled HTML text
+					auto colorHtml = [](const QString& color) -> QString
+						{
+							if (color.compare("Red", Qt::CaseInsensitive) == 0)
+								return "<span style='color:#ff4444; font-weight:bold;'>RED</span>";
+							else if (color.compare("Yellow", Qt::CaseInsensitive) == 0 ||
+								color.compare("Orange", Qt::CaseInsensitive) == 0)
+								return "<span style='color:#ffaa00; font-weight:bold;'>YELLOW</span>";
+							else if (color.compare("Green", Qt::CaseInsensitive) == 0)
+								return "<span style='color:#00ff00; font-weight:bold;'>GREEN</span>";
+							else if (color.compare("Off", Qt::CaseInsensitive) == 0)
+								return "<span style='color:#888888; font-weight:bold;'>OFF</span>";
+
+							return "<span style='color:#ffffff; font-weight:bold;'>UNKNOWN</span>";
+						};
+
+					QString label;
+					label += "<div style='color:white;'>";
+					label += "<b>Tower Light</b><br>";
+					label += QString("Color: %1").arg(colorHtml(towerLightColor));
+					label += "</div>";
+
+					auto* textItem = new QGraphicsTextItem();
+					textItem->setHtml(label);
+					camScene->addItem(textItem);
+
+					QFont f = textItem->font();
+					f.setPointSize(ui.spinBox_statusFontSize->value());
+					f.setBold(true);
+					textItem->setFont(f);
+					textItem->setZValue(1);
+
+					// background
+					QRectF textRect = textItem->boundingRect();
+					QGraphicsRectItem* bgRect = camScene->addRect(
+						textRect,
+						QPen(Qt::NoPen),
+						QBrush(QColor(0, 0, 0, 160)));
+					bgRect->setZValue(0);
+
+					// place beside polygon
+					QRectF polyRect = poly.boundingRect();
+					QPointF pos(polyRect.x() + polyRect.width(), polyRect.y());
+
+					bgRect->setPos(pos);
+					textItem->setPos(pos);
+
+					// store for cleanup
+					rectItems.append(bgRect);
+					textItems.append(textItem);
+				}
+				
 			}
 
 			if (ui.checkBox_viewObjectBbox->isChecked())
@@ -713,23 +632,6 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 					QRectF r(oR.x1, oR.y1, oR.x2 - oR.x1, oR.y2 - oR.y1);
 
 
-					float leftKneeAngle = _trackManager->computeAngle(oR.keypoints[LEFT_HIP], oR.keypoints[LEFT_KNEE], oR.keypoints[LEFT_ANKLE]);
-					float rightKneeAngle = _trackManager->computeAngle(oR.keypoints[RIGHT_HIP], oR.keypoints[RIGHT_KNEE], oR.keypoints[RIGHT_ANKLE]);
-
-					bool isSitting = (leftKneeAngle < 140 || rightKneeAngle < 140);
-					//oR.keypoints[Keypoint::LEFT_ANKLE] = _trackManager->CorrectAnklePoint(oR, true);
-					//oR.keypoints[Keypoint::RIGHT_ANKLE] = _trackManager->CorrectAnklePoint(oR, false);
-
-
-					if (isSitting)
-					{
-						oR.keypoints[Keypoint::LEFT_ANKLE] = _trackManager->CorrectAnklePoint(oR, true);
-						oR.keypoints[Keypoint::RIGHT_ANKLE] = _trackManager->CorrectAnklePoint(oR, false);
-					}
-
-					//QString positionStatus = isSitting ? "Sitting("+QString::number(oR.accuracy) + ")" : "Standing("+ QString::number(oR.accuracy) + ")";
-					QString positionStatus = isSitting ? "Sitting" : "Standing";
-
 					// === Draw bounding box ===
 					QPen rectPen(Qt::cyan);
 					rectPen.setWidth(ui.spinBox_boundingBoxSize->value());
@@ -743,29 +645,6 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 					if (it != classNames.end()) {
 						className = QString::fromStdString(it->second);
 					}
-
-
-					if (false)
-					{
-						// Label text;
-						QString label = QString("ID:%1, %2").arg(oR.tracking_id).arg(QString::number(oR.accuracy, 'f', 2));
-						// Create text item
-						QFont font("Arial", 25, QFont::Bold);
-						QGraphicsTextItem* textItem = camScene->addText(label, font);
-						textItem->setZValue(1);
-						textItem->setDefaultTextColor(Qt::white);
-
-						QRectF textRect = textItem->boundingRect();
-						QGraphicsRectItem* bgRect = camScene->addRect(textRect, QPen(Qt::NoPen), QBrush(Qt::red));
-						bgRect->setZValue(0);
-						QPointF pos(r.x(), r.y() - textRect.height() - 5);
-						bgRect->setPos(pos);
-						textItem->setPos(pos);
-
-						rectItems.append(bgRect);
-						textItems.append(textItem);
-					}
-
 
 
 					if (ui.checkBox_viewPersonStatus->isChecked())
@@ -823,11 +702,8 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 						f.setPointSize(ui.spinBox_statusFontSize->value());
 						f.setBold(true);
 						textItem->setFont(f);
-
-						/*	QFont font("Arial", 6, QFont::Bold);
-							QGraphicsTextItem* textItem = camScene->addText(label, font);*/
+	
 						textItem->setZValue(1);
-						//textItem->setDefaultTextColor(Qt::white);
 
 						QRectF textRect = textItem->boundingRect();
 						QGraphicsRectItem* bgRect = camScene->addRect(textRect, QPen(Qt::NoPen), QBrush(QColor(0, 0, 0, 160)));
@@ -846,59 +722,70 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 					if (ui.checkBox_viewPersonSkeleton->isChecked())
 					{
-						QPen kpPen(Qt::green);
-						kpPen.setWidth(6);
-						for (size_t i = 0; i < oR.keypoints.size(); ++i) {
+						// Draw keypoints
+						for (size_t i = 0; i < oR.keypoints.size(); ++i)
+						{
 							const cv::Point2f& kp = oR.keypoints[i];
 
-							if (kp.x > 0 && kp.y > 0) {
-								// Draw as small ellipse
+							if (kp.x > 0 && kp.y > 0)
+							{
 								QGraphicsEllipseItem* kpEllipse = camScene->addEllipse(
-									kp.x - 3, kp.y - 3, 6, 6, QPen(Qt::NoPen), QBrush(Qt::green));
+									kp.x - 3, kp.y - 3, 6, 6,
+									QPen(Qt::NoPen),
+									QBrush(Qt::green));
 								ellipseItems.append(kpEllipse);
 							}
 						}
 
-						float cx = 0;
-						float cy = 0;
-						if (oR.keypoints.size() >= 17) {
-							if (isSitting)
-							{
-								cx = (oR.keypoints[11].x + oR.keypoints[12].x) / 2.0f;
-								cy = (oR.keypoints[15].y + oR.keypoints[16].y) / 2.0f;
-							}
-							else
-							{
-								cx = (oR.keypoints[15].x + oR.keypoints[16].x) / 2.0f;
-								cy = (oR.keypoints[15].y + oR.keypoints[16].y) / 2.0f;
-							}
-
-						}
-						QGraphicsEllipseItem* kpEllipse = camScene->addEllipse(
-							cx - 5, cy - 5, 10, 10, QPen(Qt::NoPen), QBrush(Qt::green));
-						ellipseItems.append(kpEllipse);
-
-						// === OPTIONAL: Draw skeleton lines (COCO 17 format) ===
-						static const std::vector<std::pair<int, int>> skeleton = {
-							{5,7}, {7,9},   // left arm
-							{6,8}, {8,10},  // right arm
-							{5,6},          // shoulders
-							{11,12},        // hips
-							{5,11}, {6,12}, // torso
-							{11,13}, {13,15}, // left leg
-							{12,14}, {14,16}  // right leg
+						struct Bone
+						{
+							int p1;
+							int p2;
+							QColor color;
 						};
 
-						QPen linePen(Qt::yellow);
-						linePen.setWidth(3);
-						for (const auto& conn : skeleton) {
-							int p1 = conn.first;
-							int p2 = conn.second;
-							if (p1 < oR.keypoints.size() && p2 < oR.keypoints.size()) {
-								const cv::Point2f& k1 = oR.keypoints[p1];
-								const cv::Point2f& k2 = oR.keypoints[p2];
-								if (k1.x > 0 && k1.y > 0 && k2.x > 0 && k2.y > 0) {
-									QGraphicsLineItem* lineItem = camScene->addLine(k1.x, k1.y, k2.x, k2.y, linePen);
+						static const std::vector<Bone> handSkeleton = {
+
+							// ===== Palm =====
+							{0,5, Qt::white},
+							{5,9, Qt::white},
+							{9,13, Qt::white},
+							{13,17, Qt::white},
+
+							// Optional palm closing line
+							{0,17, Qt::white},
+
+							// ===== Thumb =====
+							{0,1, Qt::red}, {1,2, Qt::red}, {2,3, Qt::red}, {3,4, Qt::red},
+
+							// ===== Index =====
+							{5,6, Qt::yellow}, {6,7, Qt::yellow}, {7,8, Qt::yellow},
+
+							// ===== Middle =====
+							{9,10, Qt::green}, {10,11, Qt::green}, {11,12, Qt::green},
+
+							// ===== Ring =====
+							{13,14, Qt::cyan}, {14,15, Qt::cyan}, {15,16, Qt::cyan},
+
+							// ===== Pinky =====
+							{17,18, Qt::magenta}, {18,19, Qt::magenta}, {19,20, Qt::magenta}
+						};
+
+						for (const auto& bone : handSkeleton)
+						{
+							if (bone.p1 < static_cast<int>(oR.keypoints.size()) &&
+								bone.p2 < static_cast<int>(oR.keypoints.size()))
+							{
+								const cv::Point2f& k1 = oR.keypoints[bone.p1];
+								const cv::Point2f& k2 = oR.keypoints[bone.p2];
+
+								if (k1.x > 0 && k1.y > 0 && k2.x > 0 && k2.y > 0)
+								{
+									QPen pen(bone.color);
+									pen.setWidth(3);
+
+									QGraphicsLineItem* lineItem = camScene->addLine(
+										k1.x, k1.y, k2.x, k2.y, pen);
 									lineItems.append(lineItem);
 								}
 							}
@@ -913,22 +800,18 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 }
 
 void Moonica_qt::updateSingleViewResult(
-	const QHash<QString, SingleViewParentObject>& singleViewParent,
-	const QHash<QString, std::vector<OnnxResult>>& localOdResult)
+	QString towerLightColor,
+	const CleaningResult& cleaningResult)
 {
 	if (!_globalStreamingReadyFlag) return;
 
-	for (auto& c : _cameraDisplayHash)
+	if (_cameraDisplayHash.contains("towerLightCam"))
 	{
-		c.singleParentObjHash.clear();
+		_cameraDisplayHash["towerLightCam"].towerLightColor = towerLightColor;
 	}
 
 
-	for (auto it = singleViewParent.constBegin(); it != singleViewParent.constEnd(); ++it)
-	{
-		SingleViewParentObject p = it.value();
-		_cameraDisplayHash[p.camId].singleParentObjHash.insert(p.globalId, p);
-	}
+
 
 
 }

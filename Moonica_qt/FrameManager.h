@@ -76,6 +76,10 @@ signals:
 	void updateCameraGraphicView(QString cameraId,
 		QImage frame, std::vector<OnnxResult> poseEstimation,std::vector<OnnxResult> od, double currentSec);
 	void frameReadyRecord(const cv::Mat& frame, QString);
-	void frameReadyTracking(QString camId, const std::vector<OnnxResult>& poseEstimationResult,const std::vector<OnnxResult>& odResult);
+	void frameReadyTracking(
+		QString camId, const cv::Mat& frame,
+		const std::vector<OnnxResult>& poseEstimationResult,
+		const std::vector<OnnxResult>& odResult
+	);
 
 };

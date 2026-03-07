@@ -224,6 +224,7 @@ void Moonica_qt::initStreamingThread()
 
 	qRegisterMetaType< QHash<QString, SingleViewParentObject>>("QHash<QString, SingleViewParentObject>");
 	qRegisterMetaType< QHash<QString, std::vector<OnnxResult>>>("QHash<QString, std::vector<OnnxResult>>");
+	qRegisterMetaType< CleaningResult>("CleaningResult");
 	connect(_trackManager, &TrackingManager::updateSingleViewResult,
 		this, &Moonica_qt::updateSingleViewResult,
 		Qt::QueuedConnection);

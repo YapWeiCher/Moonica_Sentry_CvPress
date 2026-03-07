@@ -134,7 +134,7 @@ void FrameManager::processFrameQueue(QHash<QString, cv::Mat> localFrames,double 
 			// if the receiver lives there.
 			emit updateCameraGraphicView(camId, img.copy(), trackingResult, odResult, _currentSec); // Use img.copy() to ensure data is copied and not tied to rgbFrame's lifetime
 			emit frameReadyRecord(it.value().clone(), camId);
-			emit frameReadyTracking(camId, trackingResult, odResult);
+			//emit frameReadyTracking(camId, it.value().clone(), trackingResult, odResult);
 		}));
 	}
 
