@@ -222,9 +222,10 @@ void Moonica_qt::initStreamingThread()
 		this, &Moonica_qt::updateGlobalCoordinate,
 		Qt::QueuedConnection);
 
-	qRegisterMetaType< QHash<QString, SingleViewParentObject>>("QHash<QString, SingleViewParentObject>");
+	//qRegisterMetaType< QHash<QString, SingleViewParentObject>>("QHash<QString, SingleViewParentObject>");
 	qRegisterMetaType< QHash<QString, std::vector<OnnxResult>>>("QHash<QString, std::vector<OnnxResult>>");
 	qRegisterMetaType< CleaningResult>("CleaningResult");
+	qRegisterMetaType< TowerLightColor>("TowerLightColor");
 	connect(_trackManager, &TrackingManager::updateSingleViewResult,
 		this, &Moonica_qt::updateSingleViewResult,
 		Qt::QueuedConnection);
@@ -696,8 +697,8 @@ void Moonica_qt::connectSignalAndSlot()
 		});
 
 	connect(ui.toolButton_setNumberOfPeople, SIGNAL(clicked()), this, SLOT(forceSetNumberFloorObject()));
-	//qRegisterMetaType<OnnxResult>("OnnxResult");
-
+	
+	
 
 	connect(ui.toolButton_insertFloorPoint, &QToolButton::clicked, this, [=]()
 		{
@@ -963,6 +964,25 @@ void Moonica_qt::connectSignalAndSlot()
 		{
 			c->setChecked(false);
 		}
+		});
+
+
+	// -- cleaning -- //
+	connect(ui.pushButton_forceGreenLight, &QPushButton::clicked, this, [this]() {
+		_trackManager->forceSetTowerLightColor(TowerLightColor::GREEN_COLOR);
+		
+		});
+	connect(ui.pushButton_forceYellowLight, &QPushButton::clicked, this, [this]() {
+
+		_trackManager->forceSetTowerLightColor(TowerLightColor::YELLOW_COLOR);
+		});
+	connect(ui.pushButton_forceRedLight, &QPushButton::clicked, this, [this]() {
+
+		_trackManager->forceSetTowerLightColor(TowerLightColor::RED_COLOR);
+		});
+	connect(ui.pushButton_forceOffLight, &QPushButton::clicked, this, [this]() {
+
+		_trackManager->forceSetTowerLightColor(TowerLightColor::OFF);
 		});
 
 }

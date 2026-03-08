@@ -58,9 +58,6 @@ void FrameGrabberThread::run()
         //startFrameGrabbing_industrialCam();
         iCam_startGrab();      
     }
-  
-   
-
 }
 
 

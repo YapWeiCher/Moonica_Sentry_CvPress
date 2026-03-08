@@ -24,7 +24,7 @@ void TrackingManager::forceSetTotalFLoorPlanObject(int totalFloorPlanObject, boo
 {
 	_totalObjectInFloorPlan = totalFloorPlanObject;
 	_trackingResult.clear();
-	_forceTrace = true;
+    _forceTriggerCleaning = true;
 	setDebugMode(debugMode);
 
 	_moonica.forceSetTotalParentObject(totalFloorPlanObject, debugMode);
@@ -85,10 +85,13 @@ void TrackingManager::runMoonicaApi()
 	emit updateGlobalCoordinate(_trackingResult, _trackingResult.size());
 
 	_isProceesingGlobalId = false;
-	_forceTrace = false;
+    _forceTriggerCleaning = false;
 }
 
-
+void TrackingManager::forceSetTowerLightColor(TowerLightColor twColor)
+{
+    _forceSetTowerLightColor = twColor;
+}
 
 
 void TrackingManager::runCvPressCleaningCheck()
@@ -97,7 +100,7 @@ void TrackingManager::runCvPressCleaningCheck()
 
 	// work do here
 
-    QString towerLightColor = "off";
+    TowerLightColor towerLightColor = TowerLightColor::OFF;
 	// 1. Detect Yellow light for 50 frames lets say
     if (_doorPointHash.contains(_towerLightCam) && _camFrame.contains(_towerLightCam))
     {
@@ -108,13 +111,76 @@ void TrackingManager::runCvPressCleaningCheck()
             lightRoi << d;
         }
       
+        towerLightColor = indentifyTowerLightColor(_camFrame[_towerLightCam], lightRoi);   
 
-        towerLightColor = indentifyTowerLightColor(_camFrame[_towerLightCam], lightRoi);
-
-     
+        if (_debugMode)
+        { 
+            qDebug() << "FORCE SET LIGHT TO: " << _forceSetTowerLightColor;
+            towerLightColor = _forceSetTowerLightColor;
+       
+        }
     }
  
+   
 
+    if (_prevTowerLightColor == towerLightColor)
+    {
+        sameColorStateFrameNum++;
+    }
+    else
+    {
+        sameColorStateFrameNum = 0;
+
+    }
+    _prevTowerLightColor = towerLightColor;
+  
+
+    if (_towerLightStatus.color != towerLightColor )
+    {
+        if (sameColorStateFrameNum > 50)
+        {
+
+            if (_towerLightStatus.color == TowerLightColor::GREEN_COLOR &&
+                towerLightColor == TowerLightColor::YELLOW_COLOR)
+            {
+                qDebug() << "!! cleaning kick started";
+
+                _startCleaningProcess = true;
+
+                _cleaningTimer.start();
+                _cleaningRunning = true;
+            }
+            else if (_towerLightStatus.color == TowerLightColor::YELLOW_COLOR &&
+                towerLightColor == TowerLightColor::GREEN_COLOR)
+            {
+                qDebug() << "!! cleaning kick end";
+
+                _startCleaningProcess = false;
+
+                if (_cleaningRunning)
+                {
+                    qint64 durationMs = _cleaningTimer.elapsed();
+
+                    double durationSec = durationMs / 1000.0;
+
+                    qDebug() << "Cleaning duration:" << durationSec << "seconds";
+
+                    _cleaningRunning = false;
+                }
+            }
+
+            qDebug() << "Trigger change color:" << towerLightColor;
+
+            _towerLightStatus.frameNum = 0;
+            _towerLightStatus.color = towerLightColor;
+        }
+    }
+    else
+    {
+        _towerLightStatus.frameNum++;
+    }
+
+   
 	// 2. check trigger to operator start cleaning time
 
 	// 3. once detect hand, trigger cleaning start time
@@ -127,7 +193,7 @@ void TrackingManager::runCvPressCleaningCheck()
 	_isProceesingGlobalId = false;
 }
 
-QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QPolygonF& lightRoi)
+TowerLightColor TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QPolygonF& lightRoi)
 {
 	// tower light position is within the light ROi
 	// this function indentify whether the color is 
@@ -136,7 +202,7 @@ QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QP
 	// 3. Green
 
     if (frame.empty() || lightRoi.size() < 3)
-        return "Unknown";
+        return TowerLightColor::OFF;
 
     // Support both BGR and grayscale safety
     cv::Mat bgrFrame;
@@ -154,7 +220,7 @@ QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QP
     }
     else
     {
-        return "Unknown";
+        return TowerLightColor::OFF;
     }
 
     // Create ROI mask from polygon
@@ -203,7 +269,7 @@ QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QP
     int totalCount = cv::countNonZero(mask);
 
     if (totalCount <= 0)
-        return "Unknown";
+        return TowerLightColor::OFF;
 
     // Ratio against ROI area
     double redRatio = static_cast<double>(redCount) / totalCount;
@@ -216,15 +282,15 @@ QString TrackingManager::indentifyTowerLightColor(const cv::Mat& frame, const QP
     double maxRatio = std::max({ redRatio, yellowRatio, greenRatio });
 
     if (maxRatio < minRatio)
-        return "Off";
+        return TowerLightColor::OFF;
 
     if (redRatio >= yellowRatio && redRatio >= greenRatio)
-        return "Red";
+        return TowerLightColor::RED_COLOR;
 
     if (yellowRatio >= redRatio && yellowRatio >= greenRatio)
-        return "Yellow";
+        return TowerLightColor::YELLOW_COLOR;
 
-    return "Green";
+    return TowerLightColor::GREEN_COLOR;
 }
 
 

@@ -523,7 +523,23 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QGraphicsPolygonItem* polyItem = camScene->addPolygon(poly, pen, brush);
 
-				QString towerLightColor = _cameraDisplayHash[cameraId].towerLightColor;
+				QString towerLightColor = "Off";
+				if (_cameraDisplayHash[cameraId].towerLightColor == TowerLightColor::GREEN_COLOR)
+				{
+					towerLightColor = "Green";
+				}
+				else if (_cameraDisplayHash[cameraId].towerLightColor == TowerLightColor::YELLOW_COLOR)
+				{
+					towerLightColor = "Yellow";
+				}
+				else if (_cameraDisplayHash[cameraId].towerLightColor == TowerLightColor::RED_COLOR)
+				{
+					towerLightColor = "Red";
+				}
+				else if (_cameraDisplayHash[cameraId].towerLightColor == TowerLightColor::OFF)
+				{
+					towerLightColor = "Off";
+				}
 
 				polygonsItems.append(polyItem);
 
@@ -536,8 +552,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 						{
 							if (color.compare("Red", Qt::CaseInsensitive) == 0)
 								return "<span style='color:#ff4444; font-weight:bold;'>RED</span>";
-							else if (color.compare("Yellow", Qt::CaseInsensitive) == 0 ||
-								color.compare("Orange", Qt::CaseInsensitive) == 0)
+							else if (color.compare("Yellow", Qt::CaseInsensitive) == 0)
 								return "<span style='color:#ffaa00; font-weight:bold;'>YELLOW</span>";
 							else if (color.compare("Green", Qt::CaseInsensitive) == 0)
 								return "<span style='color:#00ff00; font-weight:bold;'>GREEN</span>";
@@ -800,7 +815,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 }
 
 void Moonica_qt::updateSingleViewResult(
-	QString towerLightColor,
+	TowerLightColor towerLightColor,
 	const CleaningResult& cleaningResult)
 {
 	if (!_globalStreamingReadyFlag) return;

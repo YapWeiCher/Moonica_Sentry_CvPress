@@ -370,7 +370,7 @@ public slots:
 
     void updateGlobalCoordinate(const QVector<ParentObject>& trackingObjects, int numberOfPeople);
     void forceSetNumberFloorObject();
-    void updateSingleViewResult(QString towerLightColor, 
+    void updateSingleViewResult(TowerLightColor towerLightColor, 
         const CleaningResult& cleaningResult);
 
     void clearOverlayItems(CameraDisplay& cd);

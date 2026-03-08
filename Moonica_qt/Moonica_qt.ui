@@ -1725,7 +1725,37 @@ QTabWidget::pane {
                   <string>Floor Map</string>
                  </attribute>
                  <layout class="QGridLayout" name="gridLayout_25">
-                  <item row="3" column="0">
+                  <item row="0" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_textCamDebug">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>9</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Debug Mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_renderDetail">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>9</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Render Details</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="4" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
                     <item>
                      <widget class="QLabel" name="label_15">
@@ -1756,31 +1786,6 @@ QTabWidget::pane {
                    </layout>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QMainGraphicsView" name="graphicsView_viewFloorPlan2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>250</horstretch>
-                      <verstretch>250</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>50</width>
-                      <height>50</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="autoFillBackground">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
                     <item>
                      <widget class="QLabel" name="label_14">
@@ -1820,31 +1825,58 @@ QTabWidget::pane {
                     </item>
                    </layout>
                   </item>
-                  <item row="0" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                  <item row="3" column="0">
+                   <widget class="QMainGraphicsView" name="graphicsView_viewFloorPlan2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>250</horstretch>
+                      <verstretch>250</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>50</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <layout class="QVBoxLayout" name="verticalLayout_9">
                     <item>
-                     <widget class="QCheckBox" name="checkBox_textCamDebug">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>9</pointsize>
-                       </font>
-                      </property>
+                     <widget class="QPushButton" name="pushButton_forceGreenLight">
                       <property name="text">
-                       <string>Debug Mode</string>
+                       <string>Force Green Light</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QCheckBox" name="checkBox_renderDetail">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>9</pointsize>
-                       </font>
-                      </property>
+                     <widget class="QPushButton" name="pushButton_forceYellowLight">
                       <property name="text">
-                       <string>Render Details</string>
+                       <string>Force Yellow Light</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_forceRedLight">
+                      <property name="text">
+                       <string>Force Red Light </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_forceOffLight">
+                      <property name="text">
+                       <string>Force Off Light</string>
                       </property>
                      </widget>
                     </item>

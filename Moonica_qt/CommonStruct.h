@@ -39,7 +39,7 @@ struct CameraDisplay
     
     QHash<QString, SingleViewParentObject> singleParentObjHash;
 
-    QString towerLightColor;
+    TowerLightColor towerLightColor;
 
 };
 

@@ -32,14 +32,14 @@ public:
 	void removeActiveCamera(QString camId);
 	void forceSetTotalFLoorPlanObject(int totalFloorPlanObject, bool debugMode);
 	
-	
+	void forceSetTowerLightColor(TowerLightColor twColor);
 
     void setCriteria(CheckingCriteria checkingCriteria);
 
 
 	
     void runCvPressCleaningCheck();
-	QString indentifyTowerLightColor(const cv::Mat& frame, const QPolygonF& lightRoi);
+	TowerLightColor indentifyTowerLightColor(const cv::Mat& frame, const QPolygonF& lightRoi);
 
 private:
 
@@ -52,7 +52,7 @@ private:
 
 	
 
-	bool _forceTrace = false;
+	
 	int _totalObjectInFloorPlan = 0;
 	bool _debugMode = false;
 
@@ -66,16 +66,25 @@ private:
 	QHash<QString, std::vector<OnnxResult>> _localOdResult; // key: camId
 	QHash<QString, cv::Mat> _camFrame; // key: camId
 
-	QVector<ParentObject> _trackingResult;
-	CleaningResult _cleaningResult;
+	
 
     CheckingCriteria _checkingCriteria;
-
 	void runMoonicaApi();
 	void setDebugMode(bool debugMode);
-
-	
 	QHash<QString, SingleViewParentObject> _sViewParentObjHash;
+
+	// cleaning 
+	TowerLightColor _forceSetTowerLightColor = TowerLightColor::OFF;
+	bool _forceTriggerCleaning = false;
+	QVector<ParentObject> _trackingResult;
+	CleaningResult _cleaningResult;
+	bool _startCleaningProcess;
+	TowerLightColor _prevTowerLightColor = TowerLightColor::OFF;
+	int sameColorStateFrameNum = 0;
+	TowerLightStatus _towerLightStatus;
+
+	QElapsedTimer _cleaningTimer;
+	bool _cleaningRunning = false;
 
 public slots:
 	void onResultReady(
@@ -88,7 +97,7 @@ public slots:
 
 signals:
 	void updateGlobalCoordinate(const QVector<ParentObject>& trackingObjects, int numberOfPeople);
-    void updateSingleViewResult(QString towerLightColor, const CleaningResult& cleaningResult);
+    void updateSingleViewResult(TowerLightColor towerLightColor, const CleaningResult& cleaningResult);
 
 
 };
