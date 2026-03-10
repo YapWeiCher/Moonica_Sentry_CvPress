@@ -18,7 +18,7 @@
 #include "OnnxInference.h"
 #include "CommonStruct.h"
 #include "PathManager.h"
-
+#include "TrackingStruct.h"
 class FrameManager : public QObject
 {
 	Q_OBJECT

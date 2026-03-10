@@ -332,6 +332,8 @@ private:
 
     void initializeProjectSetting();
 
+    CleaningResult _cleaningResult;
+
 public slots:
     void switchWorkingMode(WorkingMode mode);
     void switchDrawingMode(DrawingMode mode);

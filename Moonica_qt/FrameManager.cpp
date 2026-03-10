@@ -86,8 +86,8 @@ void FrameManager::processLatestFrames()
 	// render / record / ai inference etc using framesCopy
 	processFrameQueue(framesCopy, secCopy);
 }
-void FrameManager::processFrameQueue(QHash<QString, cv::Mat> localFrames,double curSecond ) {
-	
+void FrameManager::processFrameQueue(QHash<QString, cv::Mat> localFrames, double curSecond) {
+
 	_isProcessingQueue = true;
 	//QHash<QString, cv::Mat> localFrames;
 
@@ -114,19 +114,22 @@ void FrameManager::processFrameQueue(QHash<QString, cv::Mat> localFrames,double 
 
 			std::vector<int> classIdsToTrack;
 			classIdsToTrack.push_back(0);
-			
+
+
 			if (_hasPoseModel)
 			{
 				trackingResult = _onnxInferenceHash[camId]->ct_runModelTracking(frame, _aiSetting.humanTracking_accuracy, 0.3, classIdsToTrack);
 				cv::cvtColor(frame, frame, cv::COLOR_RGB2BGR);
 			}
-			
+
 			if (_hasDetectionModel)
 			{
 				odResult = _od_onnxInferenceHash[camId]->ct_runModel(frame, _aiSetting.objectDetection_accuracy, 0.5);
 			}
-			
-			
+
+
+
+
 
 			QImage img(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
 
@@ -135,7 +138,7 @@ void FrameManager::processFrameQueue(QHash<QString, cv::Mat> localFrames,double 
 			emit updateCameraGraphicView(camId, img.copy(), trackingResult, odResult, _currentSec); // Use img.copy() to ensure data is copied and not tied to rgbFrame's lifetime
 			emit frameReadyRecord(it.value().clone(), camId);
 			emit frameReadyTracking(camId, it.value().clone(), trackingResult, odResult);
-		}));
+			}));
 	}
 
 
@@ -189,7 +192,7 @@ void FrameManager::addCameraStream(QString cameraId, QString url)
 		}
 
 		QString modelPath_od = PathManager::_objectDetectionModelDir + _aiSetting.objectDetection_modelName;
-		
+
 		QFileInfo fileInfo1(modelPath_od);
 
 		if (!_aiSetting.objectDetection_modelName.isEmpty() &&
@@ -198,27 +201,27 @@ void FrameManager::addCameraStream(QString cameraId, QString url)
 		{
 			_hasDetectionModel = true;
 
-	
+
 			Onnx::InferenceEngine* onnxInfer_od = new Onnx::InferenceEngine(true);
 			onnxInfer_od->ct_loadModel(modelPath_od.toStdString(), modelPath_od.toStdString());
-			
+
 			_od_onnxInferenceHash.insert(cameraId, onnxInfer_od);
-		
+
 		}
 		else
 		{
-			_hasDetectionModel = false;		
+			_hasDetectionModel = false;
 		}
-	
 
 
-		
 
-		
-		
 
-		
-		
+
+
+
+
+
+
 	}
 }
 

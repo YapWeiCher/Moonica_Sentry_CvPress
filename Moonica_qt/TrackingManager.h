@@ -78,13 +78,18 @@ private:
 	bool _forceTriggerCleaning = false;
 	QVector<ParentObject> _trackingResult;
 	CleaningResult _cleaningResult;
-	bool _startCleaningProcess;
-	TowerLightColor _prevTowerLightColor = TowerLightColor::OFF;
-	int sameColorStateFrameNum = 0;
+	
+	
+	//int sameColorStateFrameNum = 0;
 	TowerLightStatus _towerLightStatus;
 
+	TowerLightColor _prevTowerLightColor = TowerLightColor::OFF;
+	QVector<TowerLightColor> _last4TowerLightColor;
+
 	QElapsedTimer _cleaningTimer;
+	QElapsedTimer _alarmToCleaningTimer;
 	bool _cleaningRunning = false;
+	bool _hasStartCleaning = false;
 
 public slots:
 	void onResultReady(
@@ -97,7 +102,9 @@ public slots:
 
 signals:
 	void updateGlobalCoordinate(const QVector<ParentObject>& trackingObjects, int numberOfPeople);
-    void updateSingleViewResult(TowerLightColor towerLightColor, const CleaningResult& cleaningResult);
+	void updateSingleViewResult(
+		TowerLightColor towerLightColor,
+		const CleaningResult& cleaningResult);
 
 
 };

@@ -519,7 +519,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 					poly << p;
 				}
 
-				QBrush brush(QColor(255, 165, 0, 128)); // orange with 50% transparency
+				QBrush brush(QColor(255, 165, 0, 80)); // orange with 50% transparency
 
 				QGraphicsPolygonItem* polyItem = camScene->addPolygon(poly, pen, brush);
 
@@ -600,7 +600,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 				
 			}
 
-			if (ui.checkBox_viewObjectBbox->isChecked())
+			if (ui.checkBox_viewObjectBbox->isChecked() && cameraId != "towerLightCam")
 			{
 				
 				for (auto& oR : od_Result)
@@ -612,8 +612,8 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 					// Lookup object class name
 					QString className = "unknown";
-					auto it = classNames.find(oR.obj_id);
-					if (it != classNames.end()) {
+					auto it = classNames_MaruwaCvPress.find(oR.obj_id);
+					if (it != classNames_MaruwaCvPress.end()) {
 						className = QString::fromStdString(it->second);
 					}
 
@@ -638,7 +638,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 			}
 			
 
-			if (ui.checkBox_viewPersonBbox->isChecked())
+			if (ui.checkBox_viewPersonBbox->isChecked()&& cameraId != "towerLightCam")
 			{
 				for (auto& oR : oResult) {
 					QElapsedTimer t;
@@ -656,8 +656,8 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 					// Lookup object class name
 					QString className = "unknown";
-					auto it = classNames.find(oR.obj_id);
-					if (it != classNames.end()) {
+					auto it = classNames_MaruwaCvPress.find(oR.obj_id);
+					if (it != classNames_MaruwaCvPress.end()) {
 						className = QString::fromStdString(it->second);
 					}
 
@@ -809,6 +809,160 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 				}
 			}
 
+			// cleaning monitoring
+			if (true && cameraId == "handCam")
+			{
+				
+				QString qStatus;
+				QColor statusColor;
+				if (_cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
+				{
+					qStatus = "Monitoring Cleaning";
+					statusColor = QColor(0, 255, 0);   // green
+
+				}
+				else if (_cleaningResult.cleaningStatus == CleaningStatus::CLEANING_END)
+				{
+					qStatus = "Cleaning Ended";
+					statusColor = QColor(255, 0, 0);   // red 
+				}
+				QString label;
+				label += "<div style='color:white;'>";
+				label += QString("<b>%1</b>").arg(qStatus);
+				label += "</div>";
+
+				auto* textItem = new QGraphicsTextItem();
+				textItem->setHtml(label);
+				camScene->addItem(textItem);
+
+				QFont f = textItem->font();
+				f.setPointSize(20);
+				f.setBold(true);
+				textItem->setFont(f);
+				textItem->setZValue(1);
+
+				// background
+				QRectF textRect = textItem->boundingRect();
+				QGraphicsRectItem* bgRect = camScene->addRect(
+					textRect,
+					QPen(Qt::NoPen),
+					QBrush(statusColor));
+				bgRect->setZValue(0);
+
+				// place beside polygon
+				
+				QPointF pos(camView->rect().topLeft());
+
+				bgRect->setPos(pos);
+				textItem->setPos(pos);
+
+				// store for cleanup
+				rectItems.append(bgRect);
+				textItems.append(textItem);
+			}
+
+			// is cleaning
+			if (true && cameraId == "handCam")
+			{
+
+				QString qStatus;
+				QColor statusColor;
+				if (_cleaningResult.isCleaning)
+				{
+					qStatus = "Cleaning Activity Detected";
+					statusColor = QColor(0, 255, 0);   // green
+
+				}
+				else
+				{
+					qStatus = "NO Cleaning Activity Detected";
+					statusColor = QColor(255, 0, 0);   // red 
+				}
+				QString label;
+				label += "<div style='color:white;'>";
+				label += QString("<b>%1</b>").arg(qStatus);
+				label += "</div>";
+
+				auto* textItem = new QGraphicsTextItem();
+				textItem->setHtml(label);
+				camScene->addItem(textItem);
+
+				QFont f = textItem->font();
+				f.setPointSize(20);
+				f.setBold(true);
+				textItem->setFont(f);
+				textItem->setZValue(1);
+
+				// background
+				QRectF textRect = textItem->boundingRect();
+				QGraphicsRectItem* bgRect = camScene->addRect(
+					textRect,
+					QPen(Qt::NoPen),
+					QBrush(statusColor));
+				bgRect->setZValue(0);
+
+				// place beside polygon
+
+				QPointF pos(
+					camView->rect().x(), 
+					(camView->rect().y() + camView->rect().bottom())/2.0);
+
+				bgRect->setPos(pos);
+				textItem->setPos(pos);
+
+				// store for cleanup
+				rectItems.append(bgRect);
+				textItems.append(textItem);
+			}
+		
+			// timer 
+			if (true && cameraId == "handCam" )
+			{
+
+				QString qAlarmToStartCleaning = "Alarm To start Cleaning duration: "
+					+ QString::number(_cleaningResult.triggerToStartCleaningDuration);
+				QString qCleaning = "Cleaning duration: "
+					+ QString::number(_cleaningResult.cleaningDuration);
+				QString qTotalDuration = "Total duration: " 
+					+ QString::number(_cleaningResult.totalDuration);
+				
+				QString label;
+				label += "<div style='color:white;'>";
+				label += QString("%1<br>%2<br>%3").arg(qAlarmToStartCleaning).arg(qCleaning).arg(qTotalDuration);
+				label += "</div>";
+
+				auto* textItem = new QGraphicsTextItem();
+				textItem->setHtml(label);
+				camScene->addItem(textItem);
+
+				QFont f = textItem->font();
+				f.setPointSize(20);
+				f.setBold(true);
+				textItem->setFont(f);
+				textItem->setZValue(1);
+
+				// background
+				QRectF textRect = textItem->boundingRect();
+				QGraphicsRectItem* bgRect = camScene->addRect(
+					textRect,
+					QPen(Qt::NoPen),
+					QBrush(QColor(0, 255, 0)));
+				bgRect->setZValue(0);
+
+				// place beside polygon
+
+				QPointF pos(
+					camView->rect().x(),
+					(camView->rect().y() + camView->rect().bottom()) / 1.5);
+
+				bgRect->setPos(pos);
+				textItem->setPos(pos);
+
+				// store for cleanup
+				rectItems.append(bgRect);
+				textItems.append(textItem);
+			}
+
 		}
 	}
 	_prevTrackingResult = oResult;
@@ -825,7 +979,7 @@ void Moonica_qt::updateSingleViewResult(
 		_cameraDisplayHash["towerLightCam"].towerLightColor = towerLightColor;
 	}
 
-
+	_cleaningResult = cleaningResult;
 
 
 

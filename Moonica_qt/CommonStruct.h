@@ -40,7 +40,6 @@ struct CameraDisplay
     QHash<QString, SingleViewParentObject> singleParentObjHash;
 
     TowerLightColor towerLightColor;
-
 };
 
 
@@ -67,3 +66,24 @@ struct AccountInfo {
     AccessLevel accessLevel = AccessLevel::OPERATOR;
 };
 
+enum CleaningStatus 
+{
+    CLEANING_START,
+    CLEANING_END
+};
+
+struct CleaningResult
+{
+    CleaningStatus cleaningStatus = CleaningStatus::CLEANING_END;
+    QString id;
+    QString towerTriggeringTime;
+
+    bool isCleaning = false;
+    float triggerToStartCleaningDuration =-1;
+    QString cleaningTime;
+    float cleaningDuration =-1;
+    float totalDuration =-1;
+
+    bool isCompleteCleaning = false;
+   
+};
