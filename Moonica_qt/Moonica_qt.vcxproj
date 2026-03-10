@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.9.2_msvc2015_64</QtInstall>
-    <QtModules>core;sql;gui;multimedia;widgets;multimediawidgets</QtModules>
+    <QtModules>core;sql;gui;multimedia;widgets;multimediawidgets;charts</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
     <QtPlugin>true</QtPlugin>
   </PropertyGroup>
@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\Common\QJsonHelper.cpp" />
     <ClCompile Include="CamTest.cpp" />
     <ClCompile Include="CAM_IRayple.cpp" />
+    <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="DbUserAccount.cpp" />
     <ClCompile Include="FrameGrabberThread.cpp" />
     <ClCompile Include="FrameInfo.cpp" />

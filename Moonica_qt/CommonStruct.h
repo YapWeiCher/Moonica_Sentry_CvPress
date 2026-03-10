@@ -11,6 +11,49 @@
 #include <QGraphicsEllipseItem>
 
 //multi cam structure
+struct SingleViewParentObject
+{
+    QString globalId;
+    OnnxResult trackingResult;
+    QString camId;
+
+    int hasFaceMaskFrame = 0;
+    int hasGloveFrame = 0;
+    int hasEsdShoeFrame = 0;
+    int hasSmockFrame = 0;
+  
+
+    bool hasFacemask = false;
+    bool hasGlove = false;
+    bool hasEsdShoe = false;
+    bool hasSmock = false;
+   
+
+    bool isPass;
+
+    int lostTrackFrame = 0;
+
+    // reset every frame
+    bool isTracking = true;
+    bool inCheckingArea = false;
+
+    //
+    int totalFailFrame = 0;
+    bool failRecordWritten = false;
+    //
+
+
+};
+// chart 
+struct CleaningDashboardRecord
+{
+    QString id;
+    QDateTime towerTriggeringTime;
+    double triggerToStartCleaningDuration = 0.0;
+    double cleaningDuration = 0.0;
+    double totalDuration = 0.0;
+};
+
 struct CameraStream
 {
     int id;
@@ -87,3 +130,4 @@ struct CleaningResult
     bool isCompleteCleaning = false;
    
 };
+

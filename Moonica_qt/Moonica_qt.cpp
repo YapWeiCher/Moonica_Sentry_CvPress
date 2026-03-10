@@ -590,6 +590,9 @@ void Moonica_qt::connectSignalAndSlot()
 	QObject::connect(ui.toolButton_projects, &QToolButton::clicked, [&]() {
 		showProjectsPage();
 		});
+	QObject::connect(ui.toolButton_dashboard, &QToolButton::clicked, [&]() {
+		showDashboardPage();
+		});
 
 	QObject::connect(ui.toolButton_settings, &QToolButton::clicked, [&]() {
 		showSettingsPage();
@@ -1075,6 +1078,7 @@ void Moonica_qt::showWorkPage()
 	ui.toolButton_projects->setChecked(false);	
 	ui.toolButton_settings->setChecked(false);	
 	ui.toolButton_userAccount->setChecked(false);
+	ui.toolButton_dashboard->setChecked(false);
 	
 }
 
@@ -1092,12 +1096,29 @@ void Moonica_qt::showCamTestPage()
 	ui.toolButton_projects->setChecked(false);
 	ui.toolButton_settings->setChecked(false);
 	ui.toolButton_userAccount->setChecked(false);
+	ui.toolButton_dashboard->setChecked(false);
 
 	ui.checkBox_streamSetting->setChecked(true);
 
 	initCamSelection();
 }
+void Moonica_qt::showDashboardPage()
+{
+	clearCamSelectionResources();
+	stopVideoTest();
 
+	switchPageWithAnimation(DASHBOARD_PAGE);
+	//ui.stackedWidget_mainBody->setCurrentIndex(PROJECTS_PAGE);
+
+	ui.toolButton_workspace->setChecked(false);
+	ui.toolButton_camTest->setChecked(false);
+	ui.toolButton_projects->setChecked(false);
+	ui.toolButton_settings->setChecked(false);
+	ui.toolButton_userAccount->setChecked(false);
+	ui.toolButton_dashboard->setChecked(true);
+
+	runDashboard();
+}
 
 void Moonica_qt::showProjectsPage()
 {
@@ -1112,6 +1133,7 @@ void Moonica_qt::showProjectsPage()
 	ui.toolButton_projects->setChecked(true);
 	ui.toolButton_settings->setChecked(false);
 	ui.toolButton_userAccount->setChecked(false);
+	ui.toolButton_dashboard->setChecked(false);
 
 	initProjectList();
 
@@ -1130,6 +1152,7 @@ void Moonica_qt::showSettingsPage()
 	ui.toolButton_projects->setChecked(false);
 	ui.toolButton_settings->setChecked(true);
 	ui.toolButton_userAccount->setChecked(false);
+	ui.toolButton_dashboard->setChecked(false);
 
 
 	
@@ -1146,6 +1169,7 @@ void Moonica_qt::showAccountPage()
 	ui.toolButton_camTest->setChecked(false);
 	ui.toolButton_projects->setChecked(false);
 	ui.toolButton_settings->setChecked(false);
+	ui.toolButton_dashboard->setChecked(false);
 	ui.toolButton_userAccount->setChecked(true);
 
 

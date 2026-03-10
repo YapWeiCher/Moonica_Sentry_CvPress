@@ -101,6 +101,9 @@
     <ClCompile Include="LightState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dashboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

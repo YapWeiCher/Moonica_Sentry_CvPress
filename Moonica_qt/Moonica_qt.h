@@ -31,7 +31,8 @@
 #include <QSplashScreen>
 #include <QMetaType>
 #include <QProgressDialog>
-
+#include <QtCharts>
+#include <QChart>
 #include <QGridLayout>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
@@ -104,7 +105,8 @@ private:
         CAM_TEST_PAGE,
         PROJECTS_PAGE,
         SETTING_PAGE,
-        ACCOUNT_PAGE
+        ACCOUNT_PAGE,
+        DASHBOARD_PAGE
     };
 
     enum ViewMode {
@@ -203,6 +205,7 @@ private:
 
     void showWorkPage();
     void showCamTestPage();
+    void showDashboardPage();
     void showProjectsPage();
     void showSettingsPage();
     void showAccountPage();
@@ -335,6 +338,16 @@ private:
     CleaningResult _cleaningResult;
 
     void writeCleaningReportCsv();
+
+    
+    void runDashboard();
+    QVector<CleaningDashboardRecord> readCleaningCsv(const QString& filePath);
+
+    QChartView* createDurationChart(
+        const QString& title,
+        const QVector<CleaningDashboardRecord>& records,
+        std::function<double(const CleaningDashboardRecord&)> valueGetter);
+
 
 public slots:
     void switchWorkingMode(WorkingMode mode);
