@@ -76,9 +76,9 @@ struct CleaningResult
 {
     CleaningStatus cleaningStatus = CleaningStatus::CLEANING_END;
     QString id;
-    QString towerTriggeringTime;
-
     bool isCleaning = false;
+
+    QString towerTriggeringTime;
     float triggerToStartCleaningDuration =-1;
     QString cleaningTime;
     float cleaningDuration =-1;

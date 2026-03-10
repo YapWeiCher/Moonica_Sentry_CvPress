@@ -317,6 +317,38 @@ QLabel#label_good{
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="toolButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dashboard</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Moonica_qt.qrc">
+              <normaloff>:/24x24/Icon/24x24/cil-chart-line.png</normaloff>:/24x24/Icon/24x24/cil-chart-line.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="toolButton_projects">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -602,7 +634,7 @@ QLabel#label_good{
           <enum>QFrame::Raised</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="pageWorkspace">
           <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,1">
@@ -1234,7 +1266,7 @@ padding: 10px 15px;
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>669</width>
+                   <width>668</width>
                    <height>1478</height>
                   </rect>
                  </property>
@@ -2026,8 +2058,8 @@ QTabWidget::pane {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>348</width>
-                             <height>354</height>
+                             <width>151</width>
+                             <height>174</height>
                             </rect>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2098,8 +2130,8 @@ QTabWidget::pane {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>348</width>
-                             <height>354</height>
+                             <width>251</width>
+                             <height>210</height>
                             </rect>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -2952,6 +2984,31 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
               </size>
              </property>
             </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_dashboard">
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_19">
+             <item>
+              <widget class="QLabel" name="label_30">
+               <property name="text">
+                <string>Date</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QFrame" name="frame_2">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

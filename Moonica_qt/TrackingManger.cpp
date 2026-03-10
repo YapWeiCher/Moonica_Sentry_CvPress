@@ -196,7 +196,7 @@ void TrackingManager::forceSetTowerLightColor(TowerLightColor twColor)
 void TrackingManager::runCvPressCleaningCheck()
 {
 	_isProceesingGlobalId = true;
-
+	_cleaningResult.isCompleteCleaning = false;
 	// work do here
 
 	TowerLightColor towerLightColor = TowerLightColor::OFF;

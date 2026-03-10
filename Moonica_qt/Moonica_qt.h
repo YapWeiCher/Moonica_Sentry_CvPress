@@ -334,6 +334,8 @@ private:
 
     CleaningResult _cleaningResult;
 
+    void writeCleaningReportCsv();
+
 public slots:
     void switchWorkingMode(WorkingMode mode);
     void switchDrawingMode(DrawingMode mode);

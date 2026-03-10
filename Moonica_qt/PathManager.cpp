@@ -17,7 +17,10 @@ QString PathManager::_camViewsMatrixDir = "";
 QString PathManager::_floorViewsDir = "";
 QString PathManager::_recordedVideoDir = "";
 
+QString PathManager::_cleaningReportDir = "";
+
 QString PathManager::_dbUserAccountPath = "";
+
 
 void PathManager::setProject(QString project)
 {
@@ -41,6 +44,7 @@ void PathManager::setAllPath()
 	_camViewsMatrixDir = _projectRootDir + "CamViewsMatrix/";
 	_floorViewsDir = _projectRootDir + "FloorView/";
     _recordedVideoDir = _projectRootDir + "RecordedVideos/";
+    _cleaningReportDir = _projectRootDir + "Report/";
 
     _humanTrackingModelDir = _rootPath + "/AiModels/HumanTracking/";
     _objectDetectionModelDir = _rootPath + "/AiModels/ObjectDetection/";
@@ -51,6 +55,7 @@ void PathManager::setAllPath()
 	makeDir(_camViewsMatrixDir);
 	makeDir(_floorViewsDir);
     makeDir(_recordedVideoDir);
+    makeDir(_cleaningReportDir);
 
     makeDir(_humanTrackingModelDir);
     makeDir(_objectDetectionModelDir);

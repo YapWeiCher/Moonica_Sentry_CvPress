@@ -59,6 +59,7 @@ QWidget* Moonica_qt::createCameraWidget(const QString& cameraId, QGraphicsView* 
 	QLabel* label = new QLabel(cameraId);
 	label->setAlignment(Qt::AlignCenter);
 	label->setStyleSheet("background-color: #333; color: white; font-weight: bold;");
+	label->setFixedHeight(25);   // limit label height
 
 	vLayout->addWidget(label);
 	vLayout->addWidget(view);
@@ -981,8 +982,77 @@ void Moonica_qt::updateSingleViewResult(
 
 	_cleaningResult = cleaningResult;
 
+	if (_cleaningResult.isCompleteCleaning)
+	{
+		writeCleaningReportCsv();
+	}
+
+}
 
 
+void Moonica_qt::writeCleaningReportCsv()
+{
+	// Example path
+	QString filePath = PathManager::_cleaningReportDir + _cleaningResult.id+".csv";
+
+	QFile file(filePath);
+
+	// Check whether file already exists
+	bool fileExists = QFileInfo::exists(filePath);
+
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+	{
+		qWarning() << "Failed to open cleaning report csv:" << filePath;
+		return;
+	}
+
+	QTextStream out(&file);
+
+	// Write header only once
+	if (!fileExists || file.size() == 0)
+	{
+		out << "ID,"
+
+			<< "TowerTriggeringTime,"
+			<< "TriggerToStartCleaningDuration,"
+			<< "CleaningTime,"
+			<< "CleaningDuration,"
+			<< "TotalDuration\n";
+			
+	}
+
+	auto statusToString = [](CleaningStatus status) -> QString
+		{
+			switch (status)
+			{
+			case CleaningStatus::CLEANING_START:
+				return "CLEANING_START";
+			case CleaningStatus::CLEANING_END:
+				return "CLEANING_END";
+			default:
+				return "UNKNOWN";
+			}
+		};
+
+	auto escapeCsv = [](const QString& text) -> QString
+		{
+			QString t = text;
+			t.replace("\"", "\"\"");
+			return "\"" + t + "\"";
+		};
+
+	out << escapeCsv(_cleaningResult.id) << ","
+		
+		<< escapeCsv(_cleaningResult.towerTriggeringTime) << ","
+		<< _cleaningResult.triggerToStartCleaningDuration << ","
+		<< escapeCsv(_cleaningResult.cleaningTime) << ","
+		<< _cleaningResult.cleaningDuration << ","
+		<< _cleaningResult.totalDuration << "\n";
+		
+
+	file.close();
+
+	qDebug() << "Cleaning report written to:" << filePath;
 }
 
 void Moonica_qt::updateGlobalCoordinate(const QVector<ParentObject>& trackingObjects, int numberOfPeople)

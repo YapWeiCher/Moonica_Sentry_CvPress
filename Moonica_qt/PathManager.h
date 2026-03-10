@@ -37,6 +37,8 @@ public:
 	static QString _recordedVideoDir;
 
 
+	// report
+	static QString _cleaningReportDir;
 
 	static QString _dbUserAccountPath;
 
