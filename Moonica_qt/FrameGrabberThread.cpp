@@ -79,8 +79,8 @@ void FrameGrabberThread::startFrameGrabbing()
   
 
     cv::Mat frame;
-    const int delay = 60; // ori 120
-   
+    //const int delay = 60; // ori 120
+    const int delay = 120; // ori 120
 
     if (_isVideoMode)
     {

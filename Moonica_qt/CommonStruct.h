@@ -44,6 +44,17 @@ struct SingleViewParentObject
 
 
 };
+struct CheckingCriteria
+{
+    bool checkGlove = true;
+    bool checkSmock = true;
+    bool checkShoe = true;
+    bool checkMask = true;
+    bool checkHelmet = true;
+    bool checkEarplug = true;
+
+    int detectionFrameBuffer = 15;
+};
 // chart 
 struct CleaningDashboardRecord
 {

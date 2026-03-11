@@ -863,7 +863,8 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 			}
 
 			// is cleaning
-			if (true && cameraId == "handCam")
+			if (true && cameraId == "handCam"
+				&& _cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
 			{
 
 				QString qStatus;
@@ -906,7 +907,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QPointF pos(
 					camView->rect().x(), 
-					(camView->rect().y() + camView->rect().bottom())/2.0);
+					(camView->rect().y() + camView->rect().bottom())/4.0);
 
 				bgRect->setPos(pos);
 				textItem->setPos(pos);
@@ -917,7 +918,8 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 			}
 		
 			// timer 
-			if (true && cameraId == "handCam" )
+			if (true && cameraId == "handCam" 
+				&& _cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
 			{
 
 				QString qAlarmToStartCleaning = "Alarm To start Cleaning duration: "
@@ -954,7 +956,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QPointF pos(
 					camView->rect().x(),
-					(camView->rect().y() + camView->rect().bottom()) / 1.5);
+					(camView->rect().y() + camView->rect().bottom()) / 1.2);
 
 				bgRect->setPos(pos);
 				textItem->setPos(pos);

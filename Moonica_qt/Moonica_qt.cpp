@@ -988,6 +988,51 @@ void Moonica_qt::connectSignalAndSlot()
 		_trackManager->forceSetTowerLightColor(TowerLightColor::OFF);
 		});
 
+
+	connect(ui.toolButton_fromDate, &QToolButton::clicked, this, [=]() {
+		QDialog dialog(this);
+		dialog.setWindowTitle("Select Start Date");
+
+		QVBoxLayout* layout = new QVBoxLayout(&dialog);
+
+		QCalendarWidget* calendar = new QCalendarWidget(&dialog);
+		calendar->setSelectedDate(QDate::currentDate());
+		layout->addWidget(calendar);
+
+		QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+			&dialog);
+		layout->addWidget(buttonBox);
+
+		connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+		connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+		if (dialog.exec() == QDialog::Accepted) {
+			QString dateStr = calendar->selectedDate().toString("yyyy-MM-dd");
+			ui.lineEdit_fromDate->setText(dateStr);
+		}
+		});
+	connect(ui.toolButton_toDate, &QToolButton::clicked, this, [=]() {
+		QDialog dialog(this);
+		dialog.setWindowTitle("Select Start Date");
+
+		QVBoxLayout* layout = new QVBoxLayout(&dialog);
+
+		QCalendarWidget* calendar = new QCalendarWidget(&dialog);
+		calendar->setSelectedDate(QDate::currentDate());
+		layout->addWidget(calendar);
+
+		QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+			&dialog);
+		layout->addWidget(buttonBox);
+
+		connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+		connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+		if (dialog.exec() == QDialog::Accepted) {
+			QString dateStr = calendar->selectedDate().toString("yyyy-MM-dd");
+			ui.lineEdit_toDate->setText(dateStr);
+		}
+		});
 }
 
 void Moonica_qt::maximize_restoreWindow()
