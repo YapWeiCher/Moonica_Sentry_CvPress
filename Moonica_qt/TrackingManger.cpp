@@ -356,7 +356,29 @@ void TrackingManager::runCvPressCleaningCheck()
 		_cleaningResult.isCleaning = isCleaning;
 	}
 
-	
+	if (_hasStartCleaning && _localOdResult.contains(_cleaningCam))
+	{
+		QPolygonF cleaningRoi;
+		for (auto d : _doorPointHash[_cleaningCam])
+		{
+			cleaningRoi << d;
+		}
+		for (auto& oR : _localOdResult[_cleaningCam])
+		{
+			QPointF oRPoint = QPointF(oR.x1, (oR.y1 + oR.y2) / 2.0);
+			if (cleaningRoi.containsPoint(oRPoint, Qt::OddEvenFill))
+			{
+				if (oR.obj_id == 1)
+				{
+					_cleaningResult.hasBlower = true;
+				}
+				else if (oR.obj_id == 2)
+				{
+					_cleaningResult.hasCloth = true;
+				}
+			}
+		}
+	}
 
 	emit updateSingleViewResult(towerLightColor, _cleaningResult);
 

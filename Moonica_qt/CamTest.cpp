@@ -2,6 +2,10 @@
 
 void Moonica_qt::addCameraStream(QString cameraId, QString cameraUrl, int camIndex)
 {
+	QLayoutItem* item = ui.gridLayout_tempoCam->takeAt(0);
+
+	
+
 	_frameManager->addCameraStream(cameraId, cameraUrl);
 	CameraDisplay camDisplay;
 	camDisplay.camScene = new QMainGraphicsScene();
@@ -12,6 +16,16 @@ void Moonica_qt::addCameraStream(QString cameraId, QString cameraUrl, int camInd
 	camDisplay.camView->setMinimumHeight(ui.scrollArea_cameraView->height() / _curProject._settings.viewRow);
 	camDisplay.camView->setMaximumHeight(ui.scrollArea_cameraView->height() / _curProject._settings.viewRow);
 	
+	if (cameraId == "towerLightCam")
+	{
+		camDisplay.camView->setMinimumHeight(ui.scrollArea_cameraView->height() /4);
+		camDisplay.camView->setMaximumHeight(ui.scrollArea_cameraView->height() /4);
+	}
+	else
+	{
+		camDisplay.camView->setMinimumHeight((ui.scrollArea_cameraView->height() / 4)*3);
+		camDisplay.camView->setMaximumHeight((ui.scrollArea_cameraView->height() / 4) * 3);
+	}
 
 	camDisplay.camPixmapItem = nullptr; // Will be created on first frame
 	camDisplay.camView->resetTransform();
@@ -41,11 +55,20 @@ void Moonica_qt::addCameraStream(QString cameraId, QString cameraUrl, int camInd
 
 	// Place it in 2x2 grid
 	int row = camIndex / _curProject._settings.viewCol;
-
 	int col = camIndex % _curProject._settings.viewCol;
 
-
 	gridLayout->addWidget(camWidget, row, col);
+
+	//
+	//if (cameraId == "towerLightCam")
+	//{
+	//	gridLayout->addWidget(camWidget, row, col, 1, 1);
+	//}
+	//else if (cameraId == "handCam")
+	//{
+	//	gridLayout->addWidget(camWidget, row, col, 2, 1); // span 2 rows
+	//}
+	
 }
 
 
@@ -863,8 +886,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 			}
 
 			// is cleaning
-			if (true && cameraId == "handCam"
-				&& _cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
+			if (true && cameraId == "handCam")
 			{
 
 				QString qStatus;
@@ -907,7 +929,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QPointF pos(
 					camView->rect().x(), 
-					(camView->rect().y() + camView->rect().bottom())/4.0);
+					camView->rect().y() +100);
 
 				bgRect->setPos(pos);
 				textItem->setPos(pos);
@@ -922,7 +944,7 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 				&& _cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
 			{
 
-				QString qAlarmToStartCleaning = "Alarm To start Cleaning duration: "
+				QString qAlarmToStartCleaning = "Waiting Cleaning duration: "
 					+ QString::number(_cleaningResult.triggerToStartCleaningDuration);
 				QString qCleaning = "Cleaning duration: "
 					+ QString::number(_cleaningResult.cleaningDuration);
@@ -956,12 +978,61 @@ void Moonica_qt::updateCameraGraphicView(QString cameraId, QImage frame, std::ve
 
 				QPointF pos(
 					camView->rect().x(),
-					(camView->rect().y() + camView->rect().bottom()) / 1.2);
+					camView->rect().y() +600);
 
 				bgRect->setPos(pos);
 				textItem->setPos(pos);
 
 				// store for cleanup
+				rectItems.append(bgRect);
+				textItems.append(textItem);
+			}
+
+			if (cameraId == "handCam" &&_cleaningResult.cleaningStatus == CleaningStatus::CLEANING_START)
+			{
+
+				auto pf = [](bool v) {
+					return v
+						? "<span style='color:#00ff00; font-weight:bold;'>PASS</span>"
+						: "<span style='color:#ff4444; font-weight:bold;'>FAIL</span>";
+					};
+				QString label;
+
+				label += "<div style='color:white;'>";
+				label += QString("<b>Cleaning Steps</b><br>");
+
+				if (true)
+					label += QString("Blower: %1<br>").arg(pf(_cleaningResult.hasBlower));
+
+				if (true)
+					label += QString("Wipe: %1<br>").arg(pf(_cleaningResult.hasCloth));
+
+				
+
+
+
+
+
+				auto* textItem = new QGraphicsTextItem();
+				textItem->setHtml(label);
+				camScene->addItem(textItem);
+				QFont f = textItem->font();
+				f.setPointSize(15);
+				f.setBold(true);
+				textItem->setFont(f);
+
+
+				textItem->setZValue(1);
+
+
+				QRectF textRect = textItem->boundingRect();
+				QGraphicsRectItem* bgRect = camScene->addRect(textRect, QPen(Qt::NoPen), QBrush(QColor(0, 0, 0, 160)));
+				bgRect->setZValue(0);
+				QPointF pos(camView->rect().x(),
+					(camScene->sceneRect().y() + 800));
+				bgRect->setPos(pos);
+				textItem->setPos(pos);
+
 				rectItems.append(bgRect);
 				textItems.append(textItem);
 			}

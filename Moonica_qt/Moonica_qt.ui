@@ -637,7 +637,7 @@ QLabel#label_good{
           <enum>QFrame::Raised</enum>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="pageWorkspace">
           <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,1">
@@ -1269,8 +1269,8 @@ padding: 10px 15px;
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>74</width>
-                   <height>30</height>
+                   <width>668</width>
+                   <height>1478</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_14"/>
@@ -1287,8 +1287,8 @@ padding: 10px 15px;
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>121</width>
-                   <height>134</height>
+                   <width>683</width>
+                   <height>1492</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_16">
@@ -1458,8 +1458,8 @@ padding: 10px 15px;
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>58</width>
-                       <height>30</height>
+                       <width>410</width>
+                       <height>103</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_7"/>
@@ -1760,66 +1760,6 @@ QTabWidget::pane {
                   <string>Floor Map</string>
                  </attribute>
                  <layout class="QGridLayout" name="gridLayout_25">
-                  <item row="0" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_15">
-                    <item>
-                     <widget class="QCheckBox" name="checkBox_textCamDebug">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>9</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Debug Mode</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QCheckBox" name="checkBox_renderDetail">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>9</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Render Details</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="4" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_8">
-                    <item>
-                     <widget class="QLabel" name="label_15">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>10</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Total People: </string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_totalPeople">
-                      <property name="font">
-                       <font>
-                        <family>Segoe UI</family>
-                        <pointsize>10</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>-</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
                   <item row="2" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
                     <item>
@@ -1860,6 +1800,36 @@ QTabWidget::pane {
                     </item>
                    </layout>
                   </item>
+                  <item row="5" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <item>
+                     <widget class="QLabel" name="label_15">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Total People: </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_totalPeople">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
                   <item row="3" column="0">
                    <widget class="QMainGraphicsView" name="graphicsView_viewFloorPlan2">
                     <property name="sizePolicy">
@@ -1884,6 +1854,36 @@ QTabWidget::pane {
                      <bool>false</bool>
                     </property>
                    </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_textCamDebug">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>9</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Debug Mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_renderDetail">
+                      <property name="font">
+                       <font>
+                        <family>Segoe UI</family>
+                        <pointsize>9</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Render Details</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </item>
                   <item row="1" column="0">
                    <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1916,6 +1916,9 @@ QTabWidget::pane {
                      </widget>
                     </item>
                    </layout>
+                  </item>
+                  <item row="4" column="0">
+                   <layout class="QGridLayout" name="gridLayout_tempoCam"/>
                   </item>
                  </layout>
                 </widget>
@@ -2061,8 +2064,8 @@ QTabWidget::pane {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>151</width>
-                             <height>174</height>
+                             <width>348</width>
+                             <height>354</height>
                             </rect>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2133,8 +2136,8 @@ QTabWidget::pane {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>251</width>
-                             <height>210</height>
+                             <width>348</width>
+                             <height>354</height>
                             </rect>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_6">

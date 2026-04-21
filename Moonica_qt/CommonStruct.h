@@ -55,6 +55,7 @@ struct CheckingCriteria
 
     int detectionFrameBuffer = 15;
 };
+
 // chart 
 struct CleaningDashboardRecord
 {
@@ -98,9 +99,6 @@ struct CameraDisplay
 
 
 
-
-
-
 enum User_Dialog_Mode {
     LOGIN,
     CREATE_ACCOUNT
@@ -139,6 +137,14 @@ struct CleaningResult
     float totalDuration =-1;
 
     bool isCompleteCleaning = false;
+    bool hasBlower = false;
+    bool hasCloth = false;
    
 };
 
+const std::unordered_map<int, std::string> classNames_MaruwaCvPress =
+{
+   {0, "Glove"},
+   {1, "Blower"},
+   {2, "Cloth"}
+};
